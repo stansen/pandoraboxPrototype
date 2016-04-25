@@ -1,0 +1,16 @@
+<resources>
+    <string name="app_name">PandoraBox</string>
+    <string name="title_activity_home">HomeActivity</string>
+
+    <string name="navigation_drawer_open">Open navigation drawer</string>
+    <string name="navigation_drawer_close">Close navigation drawer</string>
+
+    <string name="action_settings">Settings</string>
+    <string name="tip_double_click_exit">再按一次退出</string>
+    <string name="get_in_now">立即进入</string>
+    <string name="title_activity_main_center">MainCenterActivity</string>
+    <string name="password_list">密码列表</string>
+    <string name="delete">删除</string>
+    <string name="setting">设置</string>
+    <string name="scan_code_setting">二维码设置</string>
+</resources>

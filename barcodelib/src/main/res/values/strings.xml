@@ -1,0 +1,9 @@
+<resources>
+    <string name="app_name">BarCodeLib</string>
+    <integer name="viewfinder_border_width">4</integer>
+    <integer name="viewfinder_border_length">60</integer>
+    <string name="scan_code">扫码</string>
+    <string name="cancel">取消</string>
+    <string name="choose">选择</string>
+    <string name="scan_code_key_hint">请输入二维码的key值</string>
+</resources>

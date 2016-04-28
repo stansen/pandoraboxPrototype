@@ -26,7 +26,6 @@ public class PasswordListFragment extends BaseFragment {
 
     // TODO: Customize parameters
     private int mColumnCount = 1;
-
     private OnListFragmentInteractionListener mListener;
     private RecyclerViewItemArray mRecyclerViewItemArray = new RecyclerViewItemArray();
     /**

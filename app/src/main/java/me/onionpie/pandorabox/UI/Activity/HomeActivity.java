@@ -104,7 +104,7 @@ public class HomeActivity extends BaseActivity
         if (id == R.id.password_list) {
             replaceFragment(R.id.main_content_container, new PasswordListFragment());
             // Handle the camera action
-        } else if (id == R.id.nav_gallery) {
+        } else if (id == R.id.password_rule_setting) {
 
         } else if (id == R.id.nav_slideshow) {
 
@@ -113,7 +113,7 @@ public class HomeActivity extends BaseActivity
         } else if (id == R.id.nav_scan_code) {
             Intent intent = new Intent(this, ScanCodeActivity.class);
             startActivity(intent);
-        } else if (id == R.id.nav_send) {
+        } else if (id == R.id.password_export) {
 
         }
 

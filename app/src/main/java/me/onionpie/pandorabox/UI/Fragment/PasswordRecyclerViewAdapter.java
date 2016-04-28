@@ -59,7 +59,7 @@ public class PasswordRecyclerViewAdapter extends GoogleAnimationRecyclerAdapter 
         holder1.mDelete.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                mRecyclerViewItemArray.remove(holder.getLayoutPosition());
+                mRecyclerViewItemArray.remove(holder.getAdapterPosition());
                 notifyItemRemoved(holder.getLayoutPosition());
 //                notifyItemRangeRemoved(position,mRecyclerViewItemArray.);
             }

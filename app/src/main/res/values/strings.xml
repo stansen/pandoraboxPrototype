@@ -13,4 +13,6 @@
     <string name="delete">删除</string>
     <string name="setting">设置</string>
     <string name="scan_code_setting">二维码设置</string>
+    <string name="password_export">密码导出</string>
+    <string name="password_rule_setting">密码规则设置</string>
 </resources>

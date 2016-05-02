@@ -49,6 +49,9 @@
             android:enabled="true"
             android:exported="true">
         </service>
+
+        <activity android:name=".UI.Activity.RuleSettingActivity">
+        </activity>
     </application>
 
 </manifest>

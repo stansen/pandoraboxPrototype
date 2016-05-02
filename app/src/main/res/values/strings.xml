@@ -15,4 +15,11 @@
     <string name="scan_code_setting">二维码设置</string>
     <string name="password_export">密码导出</string>
     <string name="password_rule_setting">密码规则设置</string>
+
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="rule_description">规则描述</string>
+    <string name="rule_name">规则名</string>
+    <string name="input_password_tip">请输入您的密码</string>
+    <string name="confirm">确定</string>
 </resources>

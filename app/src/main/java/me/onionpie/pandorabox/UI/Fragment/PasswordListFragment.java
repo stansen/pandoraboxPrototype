@@ -2,7 +2,6 @@ package me.onionpie.pandorabox.UI.Fragment;
 
 import android.content.Context;
 import android.os.Bundle;
-import android.support.v4.app.Fragment;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -13,8 +12,7 @@ import me.onionpie.pandorabox.Model.PasswordInfoModel;
 import me.onionpie.pandorabox.R;
 import me.onionpie.pandorabox.Temp.ItemData;
 import me.onionpie.pandorabox.Temp.RecyclerViewItemArray;
-
-import java.util.List;
+import me.onionpie.pandorabox.UI.Adapter.PasswordRecyclerViewAdapter;
 
 /**
  * A fragment representing a list of Items.

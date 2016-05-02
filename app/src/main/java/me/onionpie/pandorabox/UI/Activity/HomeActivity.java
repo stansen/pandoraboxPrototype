@@ -17,10 +17,13 @@ import com.example.jiudeng007.barcodelib.ScanCodeActivity;
 
 import butterknife.Bind;
 import butterknife.ButterKnife;
+import me.onionpie.pandorabox.ConstansParam.Constans;
 import me.onionpie.pandorabox.Model.PasswordInfoModel;
 import me.onionpie.pandorabox.R;
 import me.onionpie.pandorabox.UI.Fragment.PasswordListFragment;
 import me.onionpie.pandorabox.UI.Fragment.PasswordListFragment.OnListFragmentInteractionListener;
+import me.onionpie.pandorabox.UI.Fragment.PasswordRuleFragment;
+import me.onionpie.pandorabox.Utils.CommonPreference;
 
 public class HomeActivity extends BaseActivity
         implements NavigationView.OnNavigationItemSelectedListener, OnListFragmentInteractionListener {
@@ -105,7 +108,7 @@ public class HomeActivity extends BaseActivity
             replaceFragment(R.id.main_content_container, new PasswordListFragment());
             // Handle the camera action
         } else if (id == R.id.password_rule_setting) {
-
+            replaceFragment(R.id.main_content_container, new PasswordRuleFragment());
         } else if (id == R.id.nav_slideshow) {
 
         } else if (id == R.id.nav_manage) {
@@ -125,5 +128,12 @@ public class HomeActivity extends BaseActivity
     @Override
     public void onListFragmentInteraction(PasswordInfoModel item) {
 
+    }
+    private void validate2DCode(){
+        if (CommonPreference.getBoolean(this, Constans.QRCODE_VALID)){
+
+        }else {
+
+        }
     }
 }

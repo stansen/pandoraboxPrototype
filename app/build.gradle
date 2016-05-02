@@ -28,6 +28,7 @@ dependencies {
     }
     // Because RxAndroid releases are few and far between, it is recommended you also
     // explicitly depend on RxJava's latest version for bug fixes and new features.
+    compile project(':barcodelib')
     compile 'com.android.support:percent:23.3.0'
     compile 'com.android.support:appcompat-v7:23.3.0'
     compile 'me.relex:circleindicator:1.1.5@aar'
@@ -41,5 +42,5 @@ dependencies {
     compile 'io.reactivex:rxjava:1.1.0'
     compile 'com.nineoldandroids:library:2.4.0'
     compile 'com.google.code.gson:gson:2.6.2'
-    compile project(':barcodelib')
+    compile 'com.rengwuxian.materialedittext:library:2.1.4'
 }

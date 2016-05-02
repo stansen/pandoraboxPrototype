@@ -35,7 +35,7 @@ public class CommonPreference {
         pref.edit().putInt(key, value).apply();
     }
 
-    public static void putBooble(Context context, String key, boolean value) {
+    public static void putBoolean(Context context, String key, boolean value) {
         if (context == null) {
             return;
         }
@@ -44,7 +44,7 @@ public class CommonPreference {
         pref.edit().putBoolean(key, value).apply();
     }
 
-    public static boolean getBooble(Context context, String key){
+    public static boolean getBoolean(Context context, String key){
         if (context == null) {
             return false;
         }

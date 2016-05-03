@@ -48,6 +48,7 @@ public class RuleSettingActivity extends BaseActivity implements RuleSettingGrid
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_rule_setting);
         ButterKnife.bind(this);
+        int a = 0;
         initView();
         getIntentData();
         GridLayoutManager gridLayoutManager = new GridLayoutManager(RuleSettingActivity.this, 6);

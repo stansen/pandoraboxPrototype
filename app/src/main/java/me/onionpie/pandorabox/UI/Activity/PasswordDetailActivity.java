@@ -1,7 +1,11 @@
 package me.onionpie.pandorabox.UI.Activity;
 
+import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
+import android.support.v4.app.ActivityCompat;
+import android.support.v4.app.ActivityOptionsCompat;
+import android.support.v4.util.Pair;
 import android.text.TextUtils;
 import android.view.View;
 import android.widget.Button;
@@ -15,10 +19,12 @@ import butterknife.Bind;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 import butterknife.OnTextChanged;
+import me.onionpie.pandorabox.Helper.TransitionHelper;
 import me.onionpie.pandorabox.R;
 import me.onionpie.pandorabox.Widget.TopBarFragment;
 
 public class PasswordDetailActivity extends BaseActivity {
+    private static final int REQUEST_PASSWORD = 10001;
     @Bind(R.id.rule_setting)
     LinearLayout mRuleSetting;
     @Bind(R.id.password)
@@ -37,6 +43,7 @@ public class PasswordDetailActivity extends BaseActivity {
         ButterKnife.bind(this);
         replaceFragment(R.id.top_bar, TopBarFragment.newInstance("密码详情", ""));
         getData();
+        supportPostponeEnterTransition();
         if (mIsAdd) {
 
         } else {
@@ -48,21 +55,13 @@ public class PasswordDetailActivity extends BaseActivity {
     @OnClick(R.id.rule_setting)
     public void onClickRuleSetting(){
         if (!TextUtils.isEmpty(mPassword.getText().toString())){
-            Intent intent = new Intent(this,RuleSettingActivity.class);
-            intent.putExtra("password",mPassword.getText().toString());
-            startActivity(intent);
+            startRuleSettingActivityWithTransition(this,mRuleSetting,mPassword.getText().toString(),"密码显示规则设置");
+//            Intent intent = new Intent(this,RuleSettingActivity.class);
+//            intent.putExtra("password",mPassword.getText().toString());
+//            startActivity(intent);
         }
 
-//        new MaterialDialog.Builder(PasswordDetailActivity.this)
-//                .title("默认规则")
-//                .items(R.array.password_default_rule)
-//                .itemsCallbackSingleChoice(0, new MaterialDialog.ListCallbackSingleChoice() {
-//                    @Override
-//                    public boolean onSelection(MaterialDialog dialog, View itemView, int which, CharSequence text) {
-//                        onRuleSelected(which);
-//                        return false;
-//                    }
-//                }).show();
+
     }
 
     @OnTextChanged(R.id.password)
@@ -74,6 +73,30 @@ public class PasswordDetailActivity extends BaseActivity {
     }
     private void fillView() {
 
+    }
+
+    @Override
+    protected void onResume() {
+        supportStartPostponedEnterTransition();
+        super.onResume();
+    }
+
+    private void startRuleSettingActivityWithTransition(Activity activity, View toolbar,
+                                                        String password,String title) {
+
+        final Pair[] pairs = TransitionHelper.createSafeTransitionParticipants(activity, false,
+                new Pair<>(toolbar, activity.getString(R.string.transition_toolbar)));
+        @SuppressWarnings("unchecked")
+        ActivityOptionsCompat sceneTransitionAnimation = ActivityOptionsCompat
+                .makeSceneTransitionAnimation(activity, pairs);
+
+        // Start the activity with the participants, animating from one to the other.
+        final Bundle transitionBundle = sceneTransitionAnimation.toBundle();
+        Intent startIntent = RuleSettingActivity.getStartIntent(activity, password,title);
+        ActivityCompat.startActivityForResult(activity,
+                startIntent,
+                REQUEST_PASSWORD,
+                transitionBundle);
     }
 
 }

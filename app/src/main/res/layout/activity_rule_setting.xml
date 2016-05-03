@@ -4,12 +4,38 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent">
-
+    <FrameLayout
+        android:layout_gravity="top"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+        <TextView android:id="@+id/category_title"
+                  android:layout_width="match_parent"
+                  android:layout_height="wrap_content"
+                  android:text="fadfsf"
+                  android:paddingStart="@dimen/spacing_huge"
+                  android:paddingLeft="@dimen/spacing_huge"
+                  android:paddingTop="@dimen/spacing_micro"
+                  android:paddingBottom="@dimen/spacing_micro"
+                  android:minHeight="?actionBarSize"
+                  android:background="?colorPrimary"
+                  android:textAppearance="@style/Pandorabox.TextAppearance.Title"
+                  android:gravity="center_vertical"
+                  android:transitionName="@string/transition_toolbar"
+                  tools:ignore="UnusedAttribute,NewApi,RtlSymmetry,PrivateResource" />
+        <ImageButton android:id="@+id/back"
+                     android:layout_height="wrap_content"
+                     android:layout_width="wrap_content"
+                     android:padding="@dimen/spacing_double"
+                     android:contentDescription="@string/back"
+                     android:src="@drawable/ic_arrow_back_black_24dp"
+                     android:layout_gravity="start|center_vertical"
+                     android:background="@drawable/selector_subtle"/>
+    </FrameLayout>
     <android.support.v7.widget.RecyclerView
         android:paddingLeft="10dp"
         android:paddingRight="10dp"
         android:id="@+id/rule_grid"
-        android:layout_width="match_parent"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="center"
         tools:context="me.onionpie.pandorabox.UI.Activity.RuleSettingActivity">

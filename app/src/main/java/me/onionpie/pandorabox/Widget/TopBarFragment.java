@@ -3,6 +3,8 @@ package me.onionpie.pandorabox.Widget;
 import android.content.Context;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.support.v4.view.ViewCompat;
+import android.support.v4.view.animation.FastOutSlowInInterpolator;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -108,6 +110,14 @@ public class TopBarFragment extends Fragment {
             mImageFunctionBtn.setImageDrawable(getResources().getDrawable(mImageResId));
             mFunctionButton.setVisibility(View.GONE);
         }
+        ViewCompat.animate(mBack)
+                .scaleX(1)
+                .scaleY(1)
+                .alpha(1)
+                .setInterpolator(new FastOutSlowInInterpolator())
+                .setStartDelay(300)
+                .start();
+
     }
     @OnClick(R.id.back)
     public void onClickBack(){

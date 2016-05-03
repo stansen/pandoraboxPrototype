@@ -72,6 +72,6 @@
     <color name="transparent_1">#55000000</color>
     <color name="grey300">#E0E0E0</color>
 
-
+    <color name="touch_effect">#9ccc</color>
     <color name="delete_color">#f05a59</color>
 </resources>

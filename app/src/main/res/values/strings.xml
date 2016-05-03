@@ -22,4 +22,6 @@
     <string name="rule_name">规则名</string>
     <string name="input_password_tip">请输入您的密码</string>
     <string name="confirm">确定</string>
+    <string name="transition_toolbar">fake_toolbar_name</string>
+    <string name="back">back</string>
 </resources>

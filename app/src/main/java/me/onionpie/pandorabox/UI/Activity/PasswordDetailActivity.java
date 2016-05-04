@@ -55,10 +55,12 @@ public class PasswordDetailActivity extends BaseActivity {
     @OnClick(R.id.rule_setting)
     public void onClickRuleSetting(){
         if (!TextUtils.isEmpty(mPassword.getText().toString())){
-            startRuleSettingActivityWithTransition(this,mRuleSetting,mPassword.getText().toString(),"密码显示规则设置");
+//            startRuleSettingActivityWithTransition(this,mRuleSetting,mPassword.getText().toString(),"密码显示规则设置");
 //            Intent intent = new Intent(this,RuleSettingActivity.class);
 //            intent.putExtra("password",mPassword.getText().toString());
-//            startActivity(intent);
+//            intent.putExtra("title",)
+            Intent startIntent = RuleSettingActivity.getStartIntent(this, mPassword.getText().toString(),"密码显示规则设置");
+            startActivity(startIntent);
         }
 
 

@@ -1,9 +1,12 @@
 package me.onionpie.pandorabox.Widget;
 
+import android.annotation.SuppressLint;
 import android.content.Context;
+import android.os.Build;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.view.ViewCompat;
+import android.support.v4.view.ViewPropertyAnimatorListener;
 import android.support.v4.view.animation.FastOutSlowInInterpolator;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -17,6 +20,7 @@ import android.widget.TextView;
 import butterknife.Bind;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
+import me.onionpie.pandorabox.Helper.ApiLevelHelper;
 import me.onionpie.pandorabox.R;
 
 /**
@@ -110,23 +114,43 @@ public class TopBarFragment extends Fragment {
             mImageFunctionBtn.setImageDrawable(getResources().getDrawable(mImageResId));
             mFunctionButton.setVisibility(View.GONE);
         }
-        ViewCompat.animate(mBack)
-                .scaleX(1)
-                .scaleY(1)
-                .alpha(1)
-                .setInterpolator(new FastOutSlowInInterpolator())
-                .setStartDelay(300)
-                .start();
 
     }
     @OnClick(R.id.back)
     public void onClickBack(){
-        if (mBackListener != null){
-            mBackListener.onBackClick();
-        }
-        else {
-            getActivity().onBackPressed();
-        }
+        ViewCompat.animate(mBack)
+                .scaleX(0f)
+                .scaleY(0f)
+                .alpha(0f)
+                .setDuration(100)
+                .setListener(new ViewPropertyAnimatorListener() {
+                    @Override
+                    public void onAnimationStart(View view) {
+
+                    }
+                    @SuppressLint("NewApi")
+                    @Override
+                    public void onAnimationEnd(View view) {
+                        if (getActivity().isFinishing() ||
+                                (ApiLevelHelper.isAtLeast(Build.VERSION_CODES.JELLY_BEAN_MR1)
+                                        && getActivity().isDestroyed())) {
+                            return;
+                        }
+                        if (mBackListener != null){
+                            mBackListener.onBackClick();
+                        }
+                        else {
+                            getActivity().onBackPressed();
+                        }
+                    }
+
+                    @Override
+                    public void onAnimationCancel(View view) {
+
+                    }
+                })
+                .start();
+
     }
 
     @OnClick(R.id.function_button)

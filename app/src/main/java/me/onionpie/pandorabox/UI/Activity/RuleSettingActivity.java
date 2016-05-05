@@ -2,6 +2,7 @@ package me.onionpie.pandorabox.UI.Activity;
 
 import android.content.Context;
 import android.content.Intent;
+import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.design.widget.CollapsingToolbarLayout;
@@ -9,6 +10,9 @@ import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.view.View;
+import android.view.WindowManager;
+import android.widget.EditText;
+import android.widget.TextView;
 
 import com.afollestad.materialdialogs.DialogAction;
 import com.afollestad.materialdialogs.MaterialDialog;
@@ -50,6 +54,10 @@ public class RuleSettingActivity extends BaseActivity implements RuleSettingGrid
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_rule_setting);
         ButterKnife.bind(this);
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+            getWindow().addFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS);
+            getWindow().setStatusBarColor(getResources().getColor(R.color.colorPrimary));
+        }
         getIntentData();
         initView();
 
@@ -59,6 +67,7 @@ public class RuleSettingActivity extends BaseActivity implements RuleSettingGrid
     }
 
     private void initView() {
+
         setSupportActionBar(mToolbar);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         mCollapsingToolbarLayout.setTitle(mTitleName);
@@ -111,7 +120,7 @@ public class RuleSettingActivity extends BaseActivity implements RuleSettingGrid
 
                 break;
             case 1:
-                replaceDialog();
+                replaceDialog(String.valueOf(text));
                 break;
             case 2:
                 break;
@@ -124,9 +133,10 @@ public class RuleSettingActivity extends BaseActivity implements RuleSettingGrid
         }
     }
 
-    private void replaceDialog() {
-        new MaterialDialog.Builder(this)
+    private void replaceDialog(String target) {
+       MaterialDialog dialog =  new MaterialDialog.Builder(this)
                 .title("替换").positiveText("确定").negativeText("取消")
+                .customView(R.layout.repalce_dialog_layout,false)
                 .onPositive(new MaterialDialog.SingleButtonCallback() {
                     @Override
                     public void onClick(@NonNull MaterialDialog dialog, @NonNull DialogAction which) {
@@ -134,5 +144,10 @@ public class RuleSettingActivity extends BaseActivity implements RuleSettingGrid
                     }
                 })
                 .show();
+        View view = dialog.getCustomView();
+        TextView targetCharET = (TextView) view.findViewById(R.id.target_char);
+        EditText destinyCharEt = (EditText)view.findViewById(R.id.destiny_char);
+        targetCharET.setText(target);
     }
+
 }

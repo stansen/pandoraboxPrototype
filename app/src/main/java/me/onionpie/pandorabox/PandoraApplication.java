@@ -24,4 +24,6 @@ public class PandoraApplication extends Application {
         mApplicationContext = this;
         mInstance = this;
     }
+
+
 }

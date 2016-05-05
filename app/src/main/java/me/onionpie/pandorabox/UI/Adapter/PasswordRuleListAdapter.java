@@ -9,7 +9,7 @@ import android.widget.TextView;
 
 import butterknife.Bind;
 import butterknife.ButterKnife;
-import me.onionpie.pandorabox.Model.PasswordRuleModel;
+import me.onionpie.pandorabox.Model.SingleCharPasswordRuleModel;
 import me.onionpie.pandorabox.R;
 import me.onionpie.pandorabox.Temp.RecyclerViewItemArray;
 
@@ -33,7 +33,7 @@ public class PasswordRuleListAdapter extends RecyclerView.Adapter {
     @Override
     public void onBindViewHolder(ViewHolder holder, int position) {
         RuleViewHolder ruleViewHolder = (RuleViewHolder)holder;
-        ruleViewHolder.mItem = (PasswordRuleModel)mRecyclerViewItemArray.get(position).getData();
+        ruleViewHolder.mItem = (SingleCharPasswordRuleModel)mRecyclerViewItemArray.get(position).getData();
         ruleViewHolder.mRuleName.setText(ruleViewHolder.mItem.mRuleName);
         ruleViewHolder.mRuleDescription.setText(ruleViewHolder.mItem.mRuleDescription);
     }
@@ -48,7 +48,7 @@ public class PasswordRuleListAdapter extends RecyclerView.Adapter {
         public TextView mRuleName;
         @Bind(R.id.rule_description)
         public TextView mRuleDescription;
-        public PasswordRuleModel mItem;
+        public SingleCharPasswordRuleModel mItem;
         public RuleViewHolder(View itemView) {
             super(itemView);
             ButterKnife.bind(this,itemView);

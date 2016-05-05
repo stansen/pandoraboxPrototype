@@ -3,6 +3,7 @@
     <string-array name="password_default_rule">
         <item>隐藏</item>
         <item>替换</item>
-        <item>反转</item>
+        <item>交换</item>
+        <item>取消</item>
     </string-array>
 </resources>

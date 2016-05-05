@@ -11,8 +11,11 @@ import butterknife.ButterKnife;
 import butterknife.OnClick;
 import me.onionpie.pandorabox.Animation.ViewPagerAnimation.CubeInTransformer;
 import me.onionpie.pandorabox.Animation.ViewPagerAnimation.CubeOutTransformer;
+import me.onionpie.pandorabox.ConstansParam.Constans;
 import me.onionpie.pandorabox.R;
 import me.onionpie.pandorabox.UI.Adapter.WelcomeViewPagerAdapter;
+import me.onionpie.pandorabox.Utils.AppManager;
+import me.onionpie.pandorabox.Utils.CommonPreference;
 import me.relex.circleindicator.CircleIndicator;
 
 public class WelcomeActivity extends BaseActivity {
@@ -44,6 +47,7 @@ public class WelcomeActivity extends BaseActivity {
             public void onPageSelected(int position) {
                 if (position == 3)
                     mIn.setVisibility(View.VISIBLE);
+                else mIn.setVisibility(View.GONE);
             }
 
             @Override
@@ -57,8 +61,11 @@ public class WelcomeActivity extends BaseActivity {
 
     @OnClick(R.id.in)
     public void in() {
+        CommonPreference.putBoolean(this, Constans.KEY_IS_APP_FIRST_TIME_OPEN,true);
         Intent in = new Intent(this, HomeActivity.class);
         startActivity(in);
+
+        AppManager.getAppManager().finishActivity();
     }
 
 }

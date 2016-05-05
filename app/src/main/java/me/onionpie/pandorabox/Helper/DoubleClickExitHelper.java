@@ -1,4 +1,4 @@
-package me.onionpie.pandorabox.Utils;
+package me.onionpie.pandorabox.Helper;
 
 import android.app.Activity;
 import android.os.Handler;
@@ -6,7 +6,7 @@ import android.os.Looper;
 import android.view.KeyEvent;
 import android.widget.Toast;
 
-import me.onionpie.pandorabox.R;
+import me.onionpie.pandorabox.Utils.AppManager;
 
 
 /***
@@ -46,7 +46,7 @@ public class DoubleClickExitHelper {
 		} else {
 			isOnKeyBacking = true;
 			if(mBackToast == null) {
-				mBackToast = Toast.makeText(mActivity, R.string.tip_double_click_exit, Toast.LENGTH_SHORT);
+				mBackToast = Toast.makeText(mActivity, "再次点击退出应用", Toast.LENGTH_SHORT);
 			}
 			mBackToast.show();
 			mHandler.postDelayed(onBackTimeRunnable, 2000);

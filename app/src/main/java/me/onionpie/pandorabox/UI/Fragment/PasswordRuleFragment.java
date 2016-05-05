@@ -12,7 +12,7 @@ import android.view.ViewGroup;
 import butterknife.Bind;
 import butterknife.ButterKnife;
 import me.onionpie.pandorabox.Model.PasswordRuleDefault;
-import me.onionpie.pandorabox.Model.PasswordRuleModel;
+import me.onionpie.pandorabox.Model.SingleCharPasswordRuleModel;
 import me.onionpie.pandorabox.R;
 import me.onionpie.pandorabox.Temp.ItemData;
 import me.onionpie.pandorabox.Temp.RecyclerViewItemArray;
@@ -45,17 +45,17 @@ public class PasswordRuleFragment extends Fragment {
     }
     private RecyclerViewItemArray generateDefaultRules(){
         RecyclerViewItemArray recyclerViewItemArray = new RecyclerViewItemArray();
-        ItemData<PasswordRuleModel> itemDataHide = new ItemData<>();
+        ItemData<SingleCharPasswordRuleModel> itemDataHide = new ItemData<>();
         itemDataHide.setDataType(0);
-        itemDataHide.setData(new PasswordRuleModel(PasswordRuleDefault.RULE_HIDE,"隐藏","隐藏某个位置的密码"));
+        itemDataHide.setData(new SingleCharPasswordRuleModel(PasswordRuleDefault.RULE_HIDE,"隐藏","隐藏某个位置的密码"));
         recyclerViewItemArray.add(itemDataHide);
-        ItemData<PasswordRuleModel> itemDataReplace = new ItemData<>();
+        ItemData<SingleCharPasswordRuleModel> itemDataReplace = new ItemData<>();
         itemDataReplace.setDataType(0);
-        itemDataReplace.setData(new PasswordRuleModel(PasswordRuleDefault.RULE_REPLACE,"替换","替换某个位置的密码"));
+        itemDataReplace.setData(new SingleCharPasswordRuleModel(PasswordRuleDefault.RULE_REPLACE,"替换","替换某个位置的密码"));
         recyclerViewItemArray.add(itemDataReplace);
-        ItemData<PasswordRuleModel> itemDataReverse = new ItemData<>();
+        ItemData<SingleCharPasswordRuleModel> itemDataReverse = new ItemData<>();
         itemDataReverse.setDataType(0);
-        itemDataReverse.setData(new PasswordRuleModel(PasswordRuleDefault.RULE_REPLACE,"反转","反转某个位置的密码"));
+        itemDataReverse.setData(new SingleCharPasswordRuleModel(PasswordRuleDefault.RULE_REPLACE,"反转","反转某个位置的密码"));
         recyclerViewItemArray.add(itemDataReplace);
         return recyclerViewItemArray;
     }

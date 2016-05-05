@@ -10,4 +10,6 @@ public class Constans {
     public static final String QRCODE_VALID = "qr_code_valid";
 
     public static final String SAVE_IMG_PATH = "";
+
+    public static final String KEY_IS_APP_FIRST_TIME_OPEN = "is_app_first_time_open";
 }

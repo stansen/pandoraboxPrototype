@@ -10,6 +10,7 @@ import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.widget.Toolbar;
+import android.view.KeyEvent;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -21,11 +22,13 @@ import com.example.jiudeng007.barcodelib.ScanCodeActivity;
 import butterknife.Bind;
 import butterknife.ButterKnife;
 import me.onionpie.pandorabox.ConstansParam.Constans;
+import me.onionpie.pandorabox.Helper.DoubleClickExitHelper;
 import me.onionpie.pandorabox.Model.PasswordInfoModel;
 import me.onionpie.pandorabox.R;
 import me.onionpie.pandorabox.UI.Fragment.PasswordListFragment;
 import me.onionpie.pandorabox.UI.Fragment.PasswordListFragment.OnListFragmentInteractionListener;
 import me.onionpie.pandorabox.UI.Fragment.PasswordRuleFragment;
+import me.onionpie.pandorabox.Utils.AppManager;
 import me.onionpie.pandorabox.Utils.CommonPreference;
 
 public class HomeActivity extends BaseActivity
@@ -39,13 +42,14 @@ public class HomeActivity extends BaseActivity
     NavigationView mNavView;
     @Bind(R.id.drawer_layout)
     DrawerLayout mDrawerLayout;
-
+    DoubleClickExitHelper mDoubleClickExitHelper;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_home);
         ButterKnife.bind(this);
         setSupportActionBar(mToolbar);
+        mDoubleClickExitHelper = new DoubleClickExitHelper(this);
 //        StatusBarCompat.compat(this, getResources().getColor(R.color.colorPrimary));
         mFab.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -99,6 +103,7 @@ public class HomeActivity extends BaseActivity
         } else {
             super.onBackPressed();
         }
+        AppManager.getAppManager().AppExit(getApplicationContext());
     }
 
     @Override
@@ -164,5 +169,14 @@ public class HomeActivity extends BaseActivity
         }else {
 
         }
+    }
+
+    @Override
+    public boolean onKeyDown(int keyCode, KeyEvent event) {
+        if (keyCode == KeyEvent.KEYCODE_BACK) {
+            // 是否退出应用
+            return mDoubleClickExitHelper.onKeyDown(keyCode, event);
+        }
+        return super.onKeyDown(keyCode, event);
     }
 }

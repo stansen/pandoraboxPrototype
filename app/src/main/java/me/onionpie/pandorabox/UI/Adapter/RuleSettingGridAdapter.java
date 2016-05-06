@@ -12,18 +12,23 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
+import java.util.ArrayList;
+
 import butterknife.Bind;
 import butterknife.ButterKnife;
+import me.onionpie.pandorabox.Model.PasswordDetailModel;
+import me.onionpie.pandorabox.Model.SingleCharPasswordRuleModel;
 import me.onionpie.pandorabox.R;
 
 /**
  * Created by Gstansen on 2016/5/2.
  */
 public class RuleSettingGridAdapter extends RecyclerView.Adapter {
-    private char[] mLists;
-
-    public RuleSettingGridAdapter(char[] itemDatas, onGridItemClickListener listener) {
-        mLists = itemDatas;
+//    private char[] mLists;
+    private ArrayList<SingleCharPasswordRuleModel> mPasswordDetailModels = new ArrayList<>();
+    public RuleSettingGridAdapter(ArrayList<SingleCharPasswordRuleModel> passwordDetailModels, onGridItemClickListener listener) {
+//        mLists = itemDatas;
+        mPasswordDetailModels = passwordDetailModels;
         mOnGridItemClickListener = listener;
     }
 
@@ -31,7 +36,7 @@ public class RuleSettingGridAdapter extends RecyclerView.Adapter {
     private Context mContext;
 
     public interface onGridItemClickListener {
-        void onItemClicked(View view, int position);
+        void onItemClicked(int position);
     }
 
     @Override
@@ -48,23 +53,28 @@ public class RuleSettingGridAdapter extends RecyclerView.Adapter {
         LinearLayout.LayoutParams layoutParams = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
         layoutParams.leftMargin = (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_PX, 15, mContext.getResources().getDisplayMetrics());
 
-        if (position == mLists.length - 1) {
+        if (position == mPasswordDetailModels.size() - 1) {
             layoutParams.rightMargin = (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_PX, 15, mContext.getResources().getDisplayMetrics());
         }
         ruleGridViewHolder.mLinearLayout.setLayoutParams(layoutParams);
-        ruleGridViewHolder.mGridItemButton.setText(String.valueOf(mLists[position]));
+        ruleGridViewHolder.mGridItemButton.setText(String.valueOf(mPasswordDetailModels.get(position).mDestinyChar));
         ruleGridViewHolder.mNum.setText(String.valueOf(position + 1));
         ruleGridViewHolder.mGridItemButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                mOnGridItemClickListener.onItemClicked(ruleGridViewHolder.mItemCheckedImageView, position);
+                mOnGridItemClickListener.onItemClicked(position);
             }
         });
+        if (mPasswordDetailModels.get(position).mIsRuleSetted){
+            ruleGridViewHolder.mItemCheckedImageView.setVisibility(View.VISIBLE);
+        }else {
+            ruleGridViewHolder.mItemCheckedImageView.setVisibility(View.GONE);
+        }
     }
 
     @Override
     public int getItemCount() {
-        return mLists.length;
+        return mPasswordDetailModels.size();
     }
 
     class RuleGridViewHolder extends RecyclerView.ViewHolder {

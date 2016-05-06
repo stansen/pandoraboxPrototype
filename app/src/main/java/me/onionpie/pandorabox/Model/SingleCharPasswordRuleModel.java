@@ -6,23 +6,42 @@ import android.os.Parcelable;
 /**
  * Created by Gstansen on 2016/4/30.
  */
-public class SingleCharPasswordRuleModel implements Parcelable{
+public class SingleCharPasswordRuleModel implements Parcelable {
     public int mRuleId;
     public String mRuleName;
     public String mRuleDescription;
     /**
      * 是否设置了规则
      */
-    public boolean mIsRuleSetted;
+    public boolean mIsRuleSetted = false;
+    /**
+     * 更改前的密码字符
+     */
     public String mTargetChar;
-    public SingleCharPasswordRuleModel(){
+    /**
+     * 选择的规则的位置
+     */
+    public int mSelectedPosition = -1;
+    /**
+     * 更改后的密码字符
+     */
+    public String mDestinyChar;
+    public int mExchangePosition;
+
+    public SingleCharPasswordRuleModel() {
 
     }
-    public SingleCharPasswordRuleModel(int ruleId, String ruleName, String ruleDescription){
+
+    public SingleCharPasswordRuleModel(int ruleId, String targetChar) {
         this.mRuleId = ruleId;
-        this.mRuleName = ruleName;
-        this.mRuleDescription = ruleDescription;
+        this.mTargetChar = targetChar;
+        this.mDestinyChar = targetChar;
     }
+//    public SingleCharPasswordRuleModel(int ruleId, String ruleName, String ruleDescription){
+//        this.mRuleId = ruleId;
+//        this.mRuleName = ruleName;
+//        this.mRuleDescription = ruleDescription;
+//    }
 
     protected SingleCharPasswordRuleModel(Parcel in) {
         mRuleId = in.readInt();

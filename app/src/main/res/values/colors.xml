@@ -74,4 +74,7 @@
 
     <color name="touch_effect">#9ccc</color>
     <color name="delete_color">#f05a59</color>
+
+
+    <color name="background_bg">#fafafa</color>
 </resources>

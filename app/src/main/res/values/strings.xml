@@ -24,4 +24,6 @@
     <string name="confirm">确定</string>
     <string name="transition_toolbar">fake_toolbar_name</string>
     <string name="back">back</string>
+    <string name="limit_input_number">0123456789</string>
+    <string name="limit_input_word">0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLIMNOPQRSTUVWXYZ</string>
 </resources>

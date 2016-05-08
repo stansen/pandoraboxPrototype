@@ -1,1 +1,1 @@
-include ':app', ':barcodelib'
+include ':app', ':barcodelib', ':daogen'

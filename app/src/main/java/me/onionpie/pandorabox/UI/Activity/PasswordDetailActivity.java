@@ -4,6 +4,7 @@ import android.content.Intent;
 import android.os.Build;
 import android.os.Bundle;
 import android.text.TextUtils;
+import android.util.Log;
 import android.view.WindowManager;
 import android.widget.Button;
 import android.widget.LinearLayout;
@@ -232,15 +233,18 @@ public class PasswordDetailActivity extends BaseActivity {
                 long id = 0;
                 try {
                     String destiny = Sercurity.aesEncrypt(jsonString, ak);
+                    String akString = new String(ak);
+                    akString = String.copyValueOf(akString.toCharArray(), 0, ak.length);
+                    Log.d("akstring",akString);
                     if (mIsAdd){
                         PasswordTextItem passwordTextItem = new PasswordTextItem(null,
-                                destiny, mPasswordTextInfoModel.description, Arrays.toString(ak),
+                                destiny, mPasswordTextInfoModel.description, akString,
                                 mPasswordTextInfoModel.time);
                         id = DBHelper.getInstance().getPasswordTextItemDao().insert(passwordTextItem);
                         mPasswordTextInfoModel.id = id;
                     }else {
                         PasswordTextItem passwordTextItem = new PasswordTextItem(mPasswordTextInfoModel.id,
-                                destiny, mPasswordTextInfoModel.description, Arrays.toString(ak),
+                                destiny, mPasswordTextInfoModel.description, akString,
                                 mPasswordTextInfoModel.time);
                         DBHelper.getInstance().getPasswordTextItemDao().refresh(passwordTextItem);
                     }

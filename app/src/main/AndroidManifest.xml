@@ -15,10 +15,6 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
         <activity
-            android:name=".UI.Activity.MainActivity"
-            android:screenOrientation="portrait">
-        </activity>
-        <activity
             android:name=".UI.Activity.WelcomeActivity"
             android:screenOrientation="portrait">
         </activity>
@@ -37,10 +33,6 @@
 
                 <category android:name="android.intent.category.LAUNCHER"/>
             </intent-filter>
-        </activity>
-        <activity
-            android:name=".UI.Activity.MainCenterActivity"
-            android:label="@string/title_activity_main_center">
         </activity>
         <activity android:name=".UI.Activity.PasswordDetailActivity">
         </activity>

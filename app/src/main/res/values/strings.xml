@@ -26,4 +26,5 @@
     <string name="back">back</string>
     <string name="limit_input_number">0123456789</string>
     <string name="limit_input_word">0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLIMNOPQRSTUVWXYZ</string>
+    <string name="description_tip_hint">请输入该密码的描述，如：该密码属于哪个应用</string>
 </resources>

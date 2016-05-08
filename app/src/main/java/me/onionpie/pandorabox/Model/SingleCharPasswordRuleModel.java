@@ -6,7 +6,7 @@ import android.os.Parcelable;
 /**
  * Created by Gstansen on 2016/4/30.
  */
-public class SingleCharPasswordRuleModel implements Parcelable {
+public class SingleCharPasswordRuleModel implements Parcelable{
     public int mRuleId;
     public String mRuleName;
     public String mRuleDescription;
@@ -37,11 +37,6 @@ public class SingleCharPasswordRuleModel implements Parcelable {
         this.mTargetChar = targetChar;
         this.mDestinyChar = targetChar;
     }
-//    public SingleCharPasswordRuleModel(int ruleId, String ruleName, String ruleDescription){
-//        this.mRuleId = ruleId;
-//        this.mRuleName = ruleName;
-//        this.mRuleDescription = ruleDescription;
-//    }
 
     protected SingleCharPasswordRuleModel(Parcel in) {
         mRuleId = in.readInt();
@@ -49,6 +44,9 @@ public class SingleCharPasswordRuleModel implements Parcelable {
         mRuleDescription = in.readString();
         mIsRuleSetted = in.readByte() != 0;
         mTargetChar = in.readString();
+        mSelectedPosition = in.readInt();
+        mDestinyChar = in.readString();
+        mExchangePosition = in.readInt();
     }
 
     public static final Creator<SingleCharPasswordRuleModel> CREATOR = new Creator<SingleCharPasswordRuleModel>() {
@@ -69,11 +67,21 @@ public class SingleCharPasswordRuleModel implements Parcelable {
     }
 
     @Override
-    public void writeToParcel(Parcel dest, int flags) {
-        dest.writeInt(mRuleId);
-        dest.writeString(mRuleName);
-        dest.writeString(mRuleDescription);
-        dest.writeByte((byte) (mIsRuleSetted ? 1 : 0));
-        dest.writeString(mTargetChar);
+    public void writeToParcel(Parcel parcel, int i) {
+        parcel.writeInt(mRuleId);
+        parcel.writeString(mRuleName);
+        parcel.writeString(mRuleDescription);
+        parcel.writeByte((byte) (mIsRuleSetted ? 1 : 0));
+        parcel.writeString(mTargetChar);
+        parcel.writeInt(mSelectedPosition);
+        parcel.writeString(mDestinyChar);
+        parcel.writeInt(mExchangePosition);
     }
+//    public SingleCharPasswordRuleModel(int ruleId, String ruleName, String ruleDescription){
+//        this.mRuleId = ruleId;
+//        this.mRuleName = ruleName;
+//        this.mRuleDescription = ruleDescription;
+//    }
+
+
 }

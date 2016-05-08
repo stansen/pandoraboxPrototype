@@ -162,6 +162,6 @@ public class PasswordDetailActivity extends BaseActivity {
     private Subscription mSubscription;
 
     private void saveToLocal() {
-
+//        rx.Observable
     }
 }

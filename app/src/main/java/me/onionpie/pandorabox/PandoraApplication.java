@@ -3,6 +3,8 @@ package me.onionpie.pandorabox;
 import android.app.Application;
 import android.content.Context;
 
+import me.onionpie.greendao.DBHelper;
+
 /**
  * Created by Gstansen on 2016/4/12.
  */
@@ -23,6 +25,7 @@ public class PandoraApplication extends Application {
         super.onCreate();
         mApplicationContext = this;
         mInstance = this;
+        DBHelper.init(this);
     }
 
 

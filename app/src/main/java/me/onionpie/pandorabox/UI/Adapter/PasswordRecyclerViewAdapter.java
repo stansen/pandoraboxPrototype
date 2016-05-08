@@ -8,12 +8,10 @@ import android.widget.Button;
 import android.widget.TextView;
 
 import me.onionpie.pandorabox.Animation.RecyclerView.GoogleAnimationRecyclerAdapter;
-import me.onionpie.pandorabox.Model.PasswordInfoModel;
+import me.onionpie.pandorabox.Model.PasswordTextInfoModel;
 import me.onionpie.pandorabox.R;
 import me.onionpie.pandorabox.Temp.RecyclerViewItemArray;
 import me.onionpie.pandorabox.UI.Fragment.PasswordListFragment;
-
-import java.util.List;
 
 /**
  * {@link RecyclerView.Adapter} that can display a {@link } and makes a call to the
@@ -43,8 +41,8 @@ public class PasswordRecyclerViewAdapter extends GoogleAnimationRecyclerAdapter 
     public void onBindViewHolder(final RecyclerView.ViewHolder holder, int position) {
 
         final ViewHolder holder1 = (ViewHolder)holder;
-        holder1.mItem = (PasswordInfoModel) mRecyclerViewItemArray.get(position).getData();
-        holder1.mIdView.setText(holder1.mItem.password);
+        holder1.mItem = (PasswordTextInfoModel) mRecyclerViewItemArray.get(position).getData();
+        holder1.mIdView.setText(holder1.mItem.realPassword);
         holder1.mContentView.setText(position + "");
 
         holder1.mView.setOnClickListener(new View.OnClickListener() {
@@ -79,7 +77,7 @@ public class PasswordRecyclerViewAdapter extends GoogleAnimationRecyclerAdapter 
         public final TextView mIdView;
         public final TextView mContentView;
         public final Button mDelete;
-        public PasswordInfoModel mItem;
+        public PasswordTextInfoModel mItem;
         public ViewHolder(View view) {
             super(view);
             mView = view;

@@ -5,7 +5,6 @@ import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.NavigationView;
-import android.support.design.widget.Snackbar;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
@@ -23,7 +22,7 @@ import butterknife.Bind;
 import butterknife.ButterKnife;
 import me.onionpie.pandorabox.ConstansParam.Constans;
 import me.onionpie.pandorabox.Helper.DoubleClickExitHelper;
-import me.onionpie.pandorabox.Model.PasswordInfoModel;
+import me.onionpie.pandorabox.Model.PasswordTextInfoModel;
 import me.onionpie.pandorabox.R;
 import me.onionpie.pandorabox.UI.Fragment.PasswordListFragment;
 import me.onionpie.pandorabox.UI.Fragment.PasswordListFragment.OnListFragmentInteractionListener;
@@ -160,7 +159,7 @@ public class HomeActivity extends BaseActivity
     }
 
     @Override
-    public void onListFragmentInteraction(PasswordInfoModel item) {
+    public void onListFragmentInteraction(PasswordTextInfoModel item) {
 
     }
     private void validate2DCode(){

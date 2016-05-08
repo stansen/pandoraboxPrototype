@@ -8,7 +8,7 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import me.onionpie.pandorabox.Model.PasswordInfoModel;
+import me.onionpie.pandorabox.Model.PasswordTextInfoModel;
 import me.onionpie.pandorabox.R;
 import me.onionpie.pandorabox.Temp.ItemData;
 import me.onionpie.pandorabox.Temp.RecyclerViewItemArray;
@@ -54,10 +54,10 @@ public class PasswordListFragment extends BaseFragment {
                 recyclerView.setLayoutManager(new GridLayoutManager(context, mColumnCount));
             }
             for (int i=0;i<50;i++){
-                PasswordInfoModel passwordInfoModel = new PasswordInfoModel();
-                passwordInfoModel.id = i;
-                passwordInfoModel.password="password"+i;
-                ItemData itemData = new ItemData(1,passwordInfoModel);
+                PasswordTextInfoModel passwordTextInfoModel = new PasswordTextInfoModel();
+                passwordTextInfoModel.id = i;
+                passwordTextInfoModel.realPassword="password"+i;
+                ItemData itemData = new ItemData(1, passwordTextInfoModel);
                 mRecyclerViewItemArray.add(itemData);
             }
             recyclerView.setAdapter(new PasswordRecyclerViewAdapter(mRecyclerViewItemArray, mListener));
@@ -95,6 +95,6 @@ public class PasswordListFragment extends BaseFragment {
      */
     public interface OnListFragmentInteractionListener {
         // TODO: Update argument type and name
-        void onListFragmentInteraction(PasswordInfoModel item);
+        void onListFragmentInteraction(PasswordTextInfoModel item);
     }
 }

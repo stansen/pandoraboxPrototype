@@ -80,7 +80,11 @@ public class PasswordDetailActivity extends BaseActivity {
         starter.putExtra(POSITION,position);
         return starter;
     }
-
+    public static Intent getIntent(Context context, boolean isAdd) {
+        Intent starter = new Intent(context, PasswordDetailActivity.class);
+        starter.putExtra(IS_ADD, isAdd);
+        return starter;
+    }
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -323,10 +327,10 @@ public class PasswordDetailActivity extends BaseActivity {
 
                     @Override
                     public void onNext(String s) {
+                        saveSuccess();
                         mIsAdd = false;
                         mMaterialDialogProgress.dismiss();
                         showToast(s);
-                        saveSuccess();
                     }
                 });
     }
@@ -338,11 +342,12 @@ public class PasswordDetailActivity extends BaseActivity {
             passwordListEvent.mIsAdd = mIsAdd;
             passwordListEvent.position = mPosition;
             RxBus.getInstance().send(passwordListEvent);
+            onBackPressed();
         }
 //        Intent intent = new Intent();
 //        intent.putExtra("is_changed", true);
 //        setResult(RESULT_OK, intent);
-        onBackPressed();
+
     }
 
     private MaterialDialog mMaterialDialogProgress;

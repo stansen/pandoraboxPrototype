@@ -43,33 +43,39 @@ public class PasswordRecyclerViewAdapter extends GoogleAnimationRecyclerAdapter 
     public void onBindViewHolder(final RecyclerView.ViewHolder holder, int position) {
 
         final ViewHolder viewHolder = (ViewHolder) holder;
-        viewHolder.mItem = (PasswordTextInfoModel) mRecyclerViewItemArray.get(position).getData();
+        if (mRecyclerViewItemArray.get(position).getDataType() == 1){
+
+            viewHolder.mItem = (PasswordTextInfoModel) mRecyclerViewItemArray.get(position).getData();
 //        viewHolder.mIdView.setText(viewHolder.mItem.id + "");
-        viewHolder.mPreviewPassword.setText("预览：" + viewHolder.mItem.passwordPreview);
-        if (TextUtils.isEmpty(viewHolder.mItem.ruleName))
-            viewHolder.mRuleNameTV.setText("规则名：   无");
-        else
-            viewHolder.mRuleNameTV.setText("规则名：" + viewHolder.mItem.ruleName);
-        viewHolder.mDescriptionTV.setText("密码描述：" + viewHolder.mItem.description);
-        viewHolder.mTime.setText(viewHolder.mItem.time);
-        viewHolder.mSwipeItemView.setOnSingleClickListener(new SwipeItemView.SingleClickListener() {
-            @Override
-            public void onClick(SwipeItemView view) {
-                if (null != mListener) {
-                    // Notify the active callbacks interface (the activity, if the
-                    // fragment is attached to one) that an item has been selected.
-                    mListener.onListFragmentInteraction(viewHolder.mItem,viewHolder.getAdapterPosition());
+            viewHolder.mPreviewPassword.setText("预览：" + viewHolder.mItem.passwordPreview);
+            if (TextUtils.isEmpty(viewHolder.mItem.ruleName))
+                viewHolder.mRuleNameTV.setText("规则名：   无");
+            else
+                viewHolder.mRuleNameTV.setText("规则名：" + viewHolder.mItem.ruleName);
+            viewHolder.mDescriptionTV.setText("密码描述：" + viewHolder.mItem.description);
+            viewHolder.mTime.setText(viewHolder.mItem.time);
+            viewHolder.mSwipeItemView.setOnSingleClickListener(new SwipeItemView.SingleClickListener() {
+                @Override
+                public void onClick(SwipeItemView view) {
+                    if (null != mListener) {
+                        // Notify the active callbacks interface (the activity, if the
+                        // fragment is attached to one) that an item has been selected.
+                        mListener.onListFragmentInteraction(viewHolder.mItem,viewHolder.getAdapterPosition());
+                    }
                 }
-            }
-        });
-        viewHolder.mDelete.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                mRecyclerViewItemArray.remove(holder.getAdapterPosition());
-                notifyItemRemoved(holder.getLayoutPosition());
+            });
+            viewHolder.mDelete.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    mRecyclerViewItemArray.remove(holder.getAdapterPosition());
+                    notifyItemRemoved(holder.getLayoutPosition());
 //                notifyItemRangeRemoved(position,mRecyclerViewItemArray.);
-            }
-        });
+                }
+            });
+        }else if (mRecyclerViewItemArray.get(position).getDataType()==2){
+
+        }
+
         super.onBindViewHolder(holder, position);
     }
 

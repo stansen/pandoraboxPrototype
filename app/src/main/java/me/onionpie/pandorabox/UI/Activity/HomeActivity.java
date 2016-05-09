@@ -17,6 +17,9 @@ import android.view.View;
 import com.afollestad.materialdialogs.DialogAction;
 import com.afollestad.materialdialogs.MaterialDialog;
 import com.example.jiudeng007.barcodelib.ScanCodeActivity;
+import com.jakewharton.rxbinding.view.RxView;
+
+import java.util.concurrent.TimeUnit;
 
 import butterknife.Bind;
 import butterknife.ButterKnife;
@@ -29,6 +32,7 @@ import me.onionpie.pandorabox.UI.Fragment.PasswordListFragment.OnListFragmentInt
 import me.onionpie.pandorabox.UI.Fragment.PasswordRuleFragment;
 import me.onionpie.pandorabox.Utils.AppManager;
 import me.onionpie.pandorabox.Utils.CommonPreference;
+import rx.functions.Action1;
 
 public class HomeActivity extends BaseActivity
         implements NavigationView.OnNavigationItemSelectedListener, OnListFragmentInteractionListener {
@@ -50,37 +54,44 @@ public class HomeActivity extends BaseActivity
         setSupportActionBar(mToolbar);
         mDoubleClickExitHelper = new DoubleClickExitHelper(this);
 //        StatusBarCompat.compat(this, getResources().getColor(R.color.colorPrimary));
-        mFab.setOnClickListener(new View.OnClickListener() {
+        RxView.clicks(mFab).throttleFirst(500, TimeUnit.MILLISECONDS).subscribe(new Action1<Void>() {
             @Override
-            public void onClick(View view) {
-                new MaterialDialog.Builder(HomeActivity.this)
-                        .title("请选择记录方式")
-                        .negativeText("拍照记录")
-                        .positiveText("文字记录")
-                        .neutralText("取消")
-                        .onPositive(new MaterialDialog.SingleButtonCallback() {
-                            @Override
-                            public void onClick(@NonNull MaterialDialog dialog, @NonNull DialogAction which) {
-                                dialog.dismiss();
-                                Intent intent = new Intent(HomeActivity.this,PasswordDetailActivity.class);
-                                startActivity(intent);
-                            }
-                        })
-                        .onNegative(new MaterialDialog.SingleButtonCallback() {
-                            @Override
-                            public void onClick(@NonNull MaterialDialog dialog, @NonNull DialogAction which) {
-                                dialog.dismiss();
-                            }
-                        })
-                        .onNeutral(new MaterialDialog.SingleButtonCallback() {
-                            @Override
-                            public void onClick(@NonNull MaterialDialog dialog, @NonNull DialogAction which) {
-                                dialog.dismiss();
+            public void call(Void aVoid) {
+                mFab.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View view) {
+                        new MaterialDialog.Builder(HomeActivity.this)
+                                .title("请选择记录方式")
+                                .negativeText("拍照记录")
+                                .positiveText("文字记录")
+                                .neutralText("取消")
+                                .onPositive(new MaterialDialog.SingleButtonCallback() {
+                                    @Override
+                                    public void onClick(@NonNull MaterialDialog dialog, @NonNull DialogAction which) {
+                                        dialog.dismiss();
 
-                            }
-                        }).show();
+                                        Intent intent = PasswordDetailActivity.getIntent(HomeActivity.this,
+                                                true);
+                                        startActivity(intent);
+                                    }
+                                })
+                                .onNegative(new MaterialDialog.SingleButtonCallback() {
+                                    @Override
+                                    public void onClick(@NonNull MaterialDialog dialog, @NonNull DialogAction which) {
+                                        dialog.dismiss();
+                                    }
+                                })
+                                .onNeutral(new MaterialDialog.SingleButtonCallback() {
+                                    @Override
+                                    public void onClick(@NonNull MaterialDialog dialog, @NonNull DialogAction which) {
+                                        dialog.dismiss();
+
+                                    }
+                                }).show();
 //                Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
 //                        .setAction("Action", null).show();
+                    }
+                });
             }
         });
         ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(

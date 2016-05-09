@@ -17,7 +17,7 @@ public class PasswordTextInfoModel implements Parcelable{
      * 所有规则的名字
      */
     public String ruleName="";
-    public String realPassword;
+    public String realPassword="";
     public String akString;
     public String passwordPreview="";
     public PasswordTextInfoModel(){

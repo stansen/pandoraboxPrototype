@@ -11,6 +11,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 
 import com.afollestad.materialdialogs.MaterialDialog;
 import com.google.gson.Gson;
@@ -33,6 +34,7 @@ import me.onionpie.pandorabox.Temp.ItemData;
 import me.onionpie.pandorabox.Temp.RecyclerViewItemArray;
 import me.onionpie.pandorabox.UI.Adapter.PasswordRecyclerViewAdapter;
 import me.onionpie.pandorabox.Utils.Sercurity;
+import me.onionpie.pandorabox.Widget.SonGokuLayout;
 import rx.Observable;
 import rx.Subscriber;
 import rx.Subscription;
@@ -51,6 +53,8 @@ public class PasswordListFragment extends BaseFragment {
 
     @Bind(R.id.list)
     RecyclerView mRecyclerView;
+    @Bind(R.id.son_gu_ku)
+    ImageView mSonGokuLayout;
     // TODO: Customize parameters
     private int mColumnCount = 1;
     private OnListFragmentInteractionListener mListener;
@@ -72,16 +76,23 @@ public class PasswordListFragment extends BaseFragment {
                 @Override
                 public void call(Object o) {
                     if (o instanceof UpdatePasswordListEvent) {
-                        UpdatePasswordListEvent updatePasswordListEvent =(UpdatePasswordListEvent)o;
-                        if (updatePasswordListEvent.mIsAdd){
-                            mPasswordTextInfoModels.add(updatePasswordListEvent.mPasswordTextInfoModel);
-                            mRecyclerViewItemArray.add(new ItemData<>(1,updatePasswordListEvent.mPasswordTextInfoModel));
-
-                        }else {
-                            mPasswordTextInfoModels.set(updatePasswordListEvent.position,updatePasswordListEvent.mPasswordTextInfoModel);
-                            mRecyclerViewItemArray.set(updatePasswordListEvent.position,new ItemData<>(1,updatePasswordListEvent.mPasswordTextInfoModel));
+                        UpdatePasswordListEvent updatePasswordListEvent = (UpdatePasswordListEvent) o;
+                        if (updatePasswordListEvent.mIsAdd) {
+//                            mPasswordTextInfoModels.add(updatePasswordListEvent.mPasswordTextInfoModel);
+                            mPasswordTextInfoModels.add(0,updatePasswordListEvent.mPasswordTextInfoModel);
+                            mRecyclerViewItemArray.addBeforFirst(1,new ItemData<>(1,updatePasswordListEvent.mPasswordTextInfoModel));
+//                            mRecyclerViewItemArray.add(new ItemData<>(1, updatePasswordListEvent.mPasswordTextInfoModel));
+                            mRecyclerView.getAdapter().notifyItemInserted(0);
+                            mRecyclerView.getAdapter().notifyItemRangeChanged(0,mRecyclerViewItemArray.size());
+                        } else {
+                            mPasswordTextInfoModels.set(updatePasswordListEvent.position, updatePasswordListEvent.mPasswordTextInfoModel);
+                            mRecyclerViewItemArray.set(updatePasswordListEvent.position, new ItemData<>(1, updatePasswordListEvent.mPasswordTextInfoModel));
+                            mRecyclerView.getAdapter().notifyDataSetChanged();
                         }
-                        mRecyclerView.getAdapter().notifyDataSetChanged();
+                        mRecyclerView.setVisibility(View.VISIBLE);
+                        mSonGokuLayout.setVisibility(View.GONE);
+//                        if (mRecyclerView != null)
+//                            mRecyclerView.getAdapter().notifyDataSetChanged();
                     }
                 }
             });
@@ -138,16 +149,13 @@ public class PasswordListFragment extends BaseFragment {
                             passwordTextInfoModel.passwordPreview += singleCharPasswordRuleModel.mDestinyChar;
                         }
                         passwordTextInfoModel.realPassword = realPassword;
-                        if (TextUtils.isEmpty(passwordTextInfoModel.ruleName)){
-                            passwordTextInfoModel.ruleName = "";
-                        }else {
-                            for (String tempName : ruleNames) {
-                                passwordTextInfoModel.ruleName += tempName + ",";
-                            }
-                            if (passwordTextInfoModel.ruleName.endsWith(",")){
-                                passwordTextInfoModel.ruleName = passwordTextInfoModel.ruleName.substring(0,passwordTextInfoModel.ruleName.length()-2);
-                            }
+                        for (String tempName : ruleNames) {
+                            passwordTextInfoModel.ruleName += tempName + ",";
                         }
+                        if (passwordTextInfoModel.ruleName.endsWith(",")) {
+                            passwordTextInfoModel.ruleName = passwordTextInfoModel.ruleName.substring(0, passwordTextInfoModel.ruleName.length() - 2);
+                        }
+
 
                     } catch (Exception e) {
                         e.printStackTrace();
@@ -191,7 +199,16 @@ public class PasswordListFragment extends BaseFragment {
             ItemData<PasswordTextInfoModel> infoModelItemData = new ItemData<>(1, textInfoModel);
             mRecyclerViewItemArray.add(infoModelItemData);
         }
+        if (mRecyclerViewItemArray.size()==0){
+            mSonGokuLayout.setVisibility(View.VISIBLE);
+            mRecyclerView.setVisibility(View.GONE);
+            mSonGokuLayout.setImageResource(R.mipmap.no_order_bg);
+        }else {
+            mSonGokuLayout.setVisibility(View.GONE);
+            mRecyclerView.setVisibility(View.VISIBLE);
+        }
         mRecyclerView.setAdapter(new PasswordRecyclerViewAdapter(mRecyclerViewItemArray, mListener));
+
     }
 
     @Override
@@ -220,18 +237,19 @@ public class PasswordListFragment extends BaseFragment {
     @Override
     public void onDestroy() {
         super.onDestroy();
-        if (null != mSubscription && mSubscription.isUnsubscribed()) {
-            mSubscription.unsubscribe();
-        }
-        if (mUpdateSubscrition != null && mUpdateSubscrition.isUnsubscribed()) {
-            mUpdateSubscrition.unsubscribe();
-        }
+
     }
 
     @Override
     public void onDestroyView() {
         super.onDestroyView();
         ButterKnife.unbind(this);
+        if (null != mSubscription && mSubscription.isUnsubscribed()) {
+            mSubscription.unsubscribe();
+        }
+        if (mUpdateSubscrition != null && mUpdateSubscrition.isUnsubscribed()) {
+            mUpdateSubscrition.unsubscribe();
+        }
     }
 
     /**
@@ -246,6 +264,6 @@ public class PasswordListFragment extends BaseFragment {
      */
     public interface OnListFragmentInteractionListener {
         // TODO: Update argument type and name
-        void onListFragmentInteraction(PasswordTextInfoModel item,int position);
+        void onListFragmentInteraction(PasswordTextInfoModel item, int position);
     }
 }

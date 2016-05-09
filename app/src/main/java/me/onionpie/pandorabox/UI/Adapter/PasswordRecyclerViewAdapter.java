@@ -1,6 +1,7 @@
 package me.onionpie.pandorabox.UI.Adapter;
 
 import android.support.v7.widget.RecyclerView;
+import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -12,6 +13,7 @@ import me.onionpie.pandorabox.Model.PasswordTextInfoModel;
 import me.onionpie.pandorabox.R;
 import me.onionpie.pandorabox.Temp.RecyclerViewItemArray;
 import me.onionpie.pandorabox.UI.Fragment.PasswordListFragment;
+import me.onionpie.pandorabox.Widget.SwipeItemView;
 
 /**
  * {@link RecyclerView.Adapter} that can display a {@link } and makes a call to the
@@ -40,22 +42,27 @@ public class PasswordRecyclerViewAdapter extends GoogleAnimationRecyclerAdapter 
     @Override
     public void onBindViewHolder(final RecyclerView.ViewHolder holder, int position) {
 
-        final ViewHolder holder1 = (ViewHolder)holder;
-        holder1.mItem = (PasswordTextInfoModel) mRecyclerViewItemArray.get(position).getData();
-        holder1.mIdView.setText(holder1.mItem.realPassword);
-        holder1.mContentView.setText(position + "");
-
-        holder1.mView.setOnClickListener(new View.OnClickListener() {
+        final ViewHolder viewHolder = (ViewHolder) holder;
+        viewHolder.mItem = (PasswordTextInfoModel) mRecyclerViewItemArray.get(position).getData();
+//        viewHolder.mIdView.setText(viewHolder.mItem.id + "");
+        viewHolder.mPreviewPassword.setText("预览：" + viewHolder.mItem.passwordPreview);
+        if (TextUtils.isEmpty(viewHolder.mItem.ruleName))
+            viewHolder.mRuleNameTV.setText("规则名：   无");
+        else
+            viewHolder.mRuleNameTV.setText("规则名：" + viewHolder.mItem.ruleName);
+        viewHolder.mDescriptionTV.setText("密码描述：" + viewHolder.mItem.description);
+        viewHolder.mTime.setText(viewHolder.mItem.time);
+        viewHolder.mSwipeItemView.setOnSingleClickListener(new SwipeItemView.SingleClickListener() {
             @Override
-            public void onClick(View v) {
+            public void onClick(SwipeItemView view) {
                 if (null != mListener) {
                     // Notify the active callbacks interface (the activity, if the
                     // fragment is attached to one) that an item has been selected.
-                    mListener.onListFragmentInteraction(holder1.mItem);
+                    mListener.onListFragmentInteraction(viewHolder.mItem,viewHolder.getAdapterPosition());
                 }
             }
         });
-        holder1.mDelete.setOnClickListener(new View.OnClickListener() {
+        viewHolder.mDelete.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 mRecyclerViewItemArray.remove(holder.getAdapterPosition());
@@ -63,7 +70,7 @@ public class PasswordRecyclerViewAdapter extends GoogleAnimationRecyclerAdapter 
 //                notifyItemRangeRemoved(position,mRecyclerViewItemArray.);
             }
         });
-        super.onBindViewHolder(holder,position);
+        super.onBindViewHolder(holder, position);
     }
 
 
@@ -74,28 +81,30 @@ public class PasswordRecyclerViewAdapter extends GoogleAnimationRecyclerAdapter 
 
     public class ViewHolder extends GoogleAnimationViewHolder {
         public final View mView;
-        public final TextView mIdView;
-        public final TextView mContentView;
+        //        public final TextView mIdView;
+        public final TextView mPreviewPassword;
         public final Button mDelete;
+        public final TextView mRuleNameTV;
+        public final TextView mDescriptionTV;
+        public final SwipeItemView mSwipeItemView;
+        public final TextView mTime;
         public PasswordTextInfoModel mItem;
+
         public ViewHolder(View view) {
             super(view);
             mView = view;
-            mIdView = (TextView) view.findViewById(R.id.id);
-            mContentView = (TextView) view.findViewById(R.id.content);
-
+//            mIdView = (TextView) view.findViewById(R.id.id);
+            mPreviewPassword = (TextView) view.findViewById(R.id.preview);
+            mRuleNameTV = (TextView) view.findViewById(R.id.rule_name);
+            mSwipeItemView = (SwipeItemView) view.findViewById(R.id.swipe_item);
+            mDescriptionTV = (TextView) view.findViewById(R.id.rule_description);
+            mTime = (TextView)view.findViewById(R.id.time);
             mDelete = (Button) view.findViewById(R.id.delete_btn);
-            mDelete.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-
-                }
-            });
         }
 
         @Override
         public String toString() {
-            return super.toString() + " '" + mContentView.getText() + "'";
+            return super.toString() + " '" + mPreviewPassword.getText() + "'";
         }
     }
 }

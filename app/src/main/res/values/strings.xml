@@ -27,4 +27,7 @@
     <string name="limit_input_number">0123456789</string>
     <string name="limit_input_word">0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLIMNOPQRSTUVWXYZ</string>
     <string name="description_tip_hint">请输入该密码的描述，如：该密码属于哪个应用</string>
+    <string name="description">描述</string>
+    <string name="password_preview">密码预览</string>
+    <string name="time">时间</string>
 </resources>

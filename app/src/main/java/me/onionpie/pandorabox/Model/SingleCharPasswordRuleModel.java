@@ -8,7 +8,7 @@ import android.os.Parcelable;
  */
 public class SingleCharPasswordRuleModel implements Parcelable{
     public int mRuleId;
-    public String mRuleName;
+    public String mRuleName ="";
     public String mRuleDescription;
     /**
      * 是否设置了规则

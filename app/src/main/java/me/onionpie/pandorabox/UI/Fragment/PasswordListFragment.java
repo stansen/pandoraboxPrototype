@@ -1,10 +1,12 @@
 package me.onionpie.pandorabox.UI.Fragment;
 
 import android.content.Context;
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.text.TextUtils;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -25,6 +27,8 @@ import me.onionpie.greendao.PasswordTextItem;
 import me.onionpie.pandorabox.Model.PasswordTextInfoModel;
 import me.onionpie.pandorabox.Model.SingleCharPasswordRuleModel;
 import me.onionpie.pandorabox.R;
+import me.onionpie.pandorabox.Rx.Event.UpdatePasswordListEvent;
+import me.onionpie.pandorabox.Rx.RxBus;
 import me.onionpie.pandorabox.Temp.ItemData;
 import me.onionpie.pandorabox.Temp.RecyclerViewItemArray;
 import me.onionpie.pandorabox.UI.Adapter.PasswordRecyclerViewAdapter;
@@ -34,6 +38,7 @@ import rx.Subscriber;
 import rx.Subscription;
 import rx.android.schedulers.AndroidSchedulers;
 import rx.functions.Action0;
+import rx.functions.Action1;
 import rx.schedulers.Schedulers;
 
 /**
@@ -50,12 +55,38 @@ public class PasswordListFragment extends BaseFragment {
     private int mColumnCount = 1;
     private OnListFragmentInteractionListener mListener;
     private RecyclerViewItemArray mRecyclerViewItemArray = new RecyclerViewItemArray();
+    private Subscription mUpdateSubscrition;
 
     /**
      * Mandatory empty constructor for the fragment manager to instantiate the
      * fragment (e.g. upon screen orientation changes).
      */
     public PasswordListFragment() {
+    }
+
+    @Override
+    public void onStart() {
+        super.onStart();
+        if (mUpdateSubscrition == null || mUpdateSubscrition.isUnsubscribed()) {
+            mUpdateSubscrition = RxBus.getInstance().toObserverable().subscribe(new Action1<Object>() {
+                @Override
+                public void call(Object o) {
+                    if (o instanceof UpdatePasswordListEvent) {
+                        UpdatePasswordListEvent updatePasswordListEvent =(UpdatePasswordListEvent)o;
+                        if (updatePasswordListEvent.mIsAdd){
+                            mPasswordTextInfoModels.add(updatePasswordListEvent.mPasswordTextInfoModel);
+                            mRecyclerViewItemArray.add(new ItemData<>(1,updatePasswordListEvent.mPasswordTextInfoModel));
+
+                        }else {
+                            mPasswordTextInfoModels.set(updatePasswordListEvent.position,updatePasswordListEvent.mPasswordTextInfoModel);
+                            mRecyclerViewItemArray.set(updatePasswordListEvent.position,new ItemData<>(1,updatePasswordListEvent.mPasswordTextInfoModel));
+                        }
+                        mRecyclerView.getAdapter().notifyDataSetChanged();
+                    }
+                }
+            });
+        }
+
     }
 
     @Override
@@ -90,7 +121,7 @@ public class PasswordListFragment extends BaseFragment {
                     passwordTextInfoModel.description = temp.getDescription();
                     passwordTextInfoModel.time = temp.getDate();
                     passwordTextInfoModel.akString = temp.getAk();
-                    Log.d("akstring",passwordTextInfoModel.akString);
+                    Log.d("akstring", passwordTextInfoModel.akString);
                     String realPassword = "";
                     try {
                         String decryptedString = Sercurity.aesDecrypt(passwordTextInfoModel.jsonString
@@ -104,13 +135,18 @@ public class PasswordListFragment extends BaseFragment {
                         for (SingleCharPasswordRuleModel singleCharPasswordRuleModel : singleCharPasswordRuleModels) {
                             realPassword += singleCharPasswordRuleModel.mTargetChar;
                             ruleNames.add(singleCharPasswordRuleModel.mRuleName);
+                            passwordTextInfoModel.passwordPreview += singleCharPasswordRuleModel.mDestinyChar;
                         }
                         passwordTextInfoModel.realPassword = realPassword;
-                        int position = 0;
-                        for (String tempName : ruleNames) {
-                            if (position != ruleNames.size() - 1)
+                        if (TextUtils.isEmpty(passwordTextInfoModel.ruleName)){
+                            passwordTextInfoModel.ruleName = "";
+                        }else {
+                            for (String tempName : ruleNames) {
                                 passwordTextInfoModel.ruleName += tempName + ",";
-                            else passwordTextInfoModel.ruleName += tempName;
+                            }
+                            if (passwordTextInfoModel.ruleName.endsWith(",")){
+                                passwordTextInfoModel.ruleName = passwordTextInfoModel.ruleName.substring(0,passwordTextInfoModel.ruleName.length()-2);
+                            }
                         }
 
                     } catch (Exception e) {
@@ -150,6 +186,7 @@ public class PasswordListFragment extends BaseFragment {
     }
 
     private void setRV() {
+        mRecyclerViewItemArray.clear();
         for (PasswordTextInfoModel textInfoModel : mPasswordTextInfoModels) {
             ItemData<PasswordTextInfoModel> infoModelItemData = new ItemData<>(1, textInfoModel);
             mRecyclerViewItemArray.add(infoModelItemData);
@@ -169,6 +206,12 @@ public class PasswordListFragment extends BaseFragment {
     }
 
     @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+
+    }
+
+    @Override
     public void onDetach() {
         super.onDetach();
         mListener = null;
@@ -179,6 +222,9 @@ public class PasswordListFragment extends BaseFragment {
         super.onDestroy();
         if (null != mSubscription && mSubscription.isUnsubscribed()) {
             mSubscription.unsubscribe();
+        }
+        if (mUpdateSubscrition != null && mUpdateSubscrition.isUnsubscribed()) {
+            mUpdateSubscrition.unsubscribe();
         }
     }
 
@@ -200,6 +246,6 @@ public class PasswordListFragment extends BaseFragment {
      */
     public interface OnListFragmentInteractionListener {
         // TODO: Update argument type and name
-        void onListFragmentInteraction(PasswordTextInfoModel item);
+        void onListFragmentInteraction(PasswordTextInfoModel item,int position);
     }
 }

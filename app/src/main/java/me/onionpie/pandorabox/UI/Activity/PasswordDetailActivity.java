@@ -1,5 +1,6 @@
 package me.onionpie.pandorabox.UI.Activity;
 
+import android.content.Context;
 import android.content.Intent;
 import android.os.Build;
 import android.os.Bundle;
@@ -29,9 +30,13 @@ import butterknife.OnClick;
 import butterknife.OnTextChanged;
 import me.onionpie.greendao.DBHelper;
 import me.onionpie.greendao.PasswordTextItem;
+import me.onionpie.pandorabox.Model.PasswordDetailModel;
 import me.onionpie.pandorabox.Model.PasswordTextInfoModel;
 import me.onionpie.pandorabox.Model.SingleCharPasswordRuleModel;
 import me.onionpie.pandorabox.R;
+import me.onionpie.pandorabox.Rx.Event.UpdatePasswordListEvent;
+import me.onionpie.pandorabox.Rx.RxBus;
+import me.onionpie.pandorabox.Utils.AppManager;
 import me.onionpie.pandorabox.Utils.Sercurity;
 import me.onionpie.pandorabox.Widget.TopBarFragment;
 import me.onionpie.pandorabox.util.FileUtils;
@@ -61,9 +66,20 @@ public class PasswordDetailActivity extends BaseActivity {
     private boolean mIsAdd = true;
     private static final String IS_ADD = "is_add";
     private static final String PASSWORD_ITEM = "password_item";
+    private static final String POSITION = "position";
     private HashSet<String> mRuleNames = new HashSet<>();
+    private int mPosition;
     private ArrayList<SingleCharPasswordRuleModel> mPasswordRuleModels = new ArrayList<>();
     private PasswordTextInfoModel mPasswordTextInfoModel = new PasswordTextInfoModel();
+
+    public static Intent getStartIntent(Context context, boolean isAdd
+            , PasswordTextInfoModel passwordTextInfoModel,int position) {
+        Intent starter = new Intent(context, PasswordDetailActivity.class);
+        starter.putExtra(IS_ADD, isAdd);
+        starter.putExtra(PASSWORD_ITEM, passwordTextInfoModel);
+        starter.putExtra(POSITION,position);
+        return starter;
+    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -103,7 +119,12 @@ public class PasswordDetailActivity extends BaseActivity {
 
     @OnTextChanged(R.id.password)
     public void onPasswordChanged(CharSequence sequence) {
-        mPasswordPreview.setText("密码显示预览：" + sequence);
+
+        if (!mPasswordTextInfoModel.realPassword.equals(mPassword.getText().toString()) && !mIsAdd) {
+            initSingleCharModelList(mPassword.getText().toString());
+            mRuleName.setText("");
+        }
+        mPasswordPreview.setText(sequence);
     }
 
     private void getData() {
@@ -111,12 +132,15 @@ public class PasswordDetailActivity extends BaseActivity {
         mPasswordTextInfoModel = getIntent().getParcelableExtra(PASSWORD_ITEM);
         if (mPasswordTextInfoModel == null)
             mPasswordTextInfoModel = new PasswordTextInfoModel();
+        mPosition = getIntent().getIntExtra(POSITION,0);
     }
 
     private void fillView() {
         mPassword.setText(mPasswordTextInfoModel.realPassword);
         mRuleName.setText(mPasswordTextInfoModel.ruleName);
         mDescriptionET.setText(mPasswordTextInfoModel.description);
+        mPassword.setSelection(mPasswordTextInfoModel.realPassword.length());
+//        mDescriptionET.setSelection(mPasswordTextInfoModel.description.length()-1);
         rx.Observable.create(new rx.Observable.OnSubscribe<String>() {
             @Override
             public void call(Subscriber<? super String> subscriber) {
@@ -134,6 +158,7 @@ public class PasswordDetailActivity extends BaseActivity {
                             mRuleNames.add(singleCharPasswordRuleModels.get(i).mRuleName);
                         }
                     }
+                    mPasswordRuleModels = singleCharPasswordRuleModels;
                 } catch (Exception e) {
                     e.printStackTrace();
                 }
@@ -154,13 +179,13 @@ public class PasswordDetailActivity extends BaseActivity {
             public void onNext(String s) {
                 mPasswordPreview.setText(s);
                 String name = "";
-                int position = 0;
                 for (String temp : mRuleNames) {
-                    if (position != mRuleNames.size() - 1)
-                        name += temp + ",";
-                    else name += temp;
+                    name += temp + ",";
                 }
-                mRuleName.setText(name);
+                if (name.endsWith(",")) {
+                    mRuleName.setText(name.substring(0, name.length() - 1));
+                } else
+                    mRuleName.setText(name);
                 mPasswordTextInfoModel.ruleName = name;
             }
         });
@@ -188,14 +213,14 @@ public class PasswordDetailActivity extends BaseActivity {
                         }
                     }
                     String name = "";
-                    int position = 0;
                     for (String temp : mRuleNames) {
-                        if (position != mRuleNames.size() - 1)
-                            name += temp + ",";
-                        else name += temp;
+                        name += temp + ",";
                     }
-                    mRuleName.setText(name);
-                    mPasswordPreview.setText("密码显示预览：" + previewPassword);
+                    if (name.endsWith(",")) {
+                        mRuleName.setText(name.substring(0, name.length() - 1));
+                    } else
+                        mRuleName.setText(name);
+                    mPasswordPreview.setText(previewPassword);
 
                     break;
             }
@@ -206,18 +231,35 @@ public class PasswordDetailActivity extends BaseActivity {
     public void onClickConfirm() {
         if (TextUtils.isEmpty(mPassword.getText().toString())) {
             showToast("请输入密码");
-        } else if (TextUtils.isEmpty(mRuleName.getText().toString())) {
-            showToast("请设置密码规则");
         } else if (TextUtils.isEmpty(mDescriptionET.getText().toString())) {
             showToast("请输入密码描述");
         } else {
-            mPasswordTextInfoModel.ruleName = mRuleName.getText().toString();
+            if (TextUtils.isEmpty(mRuleName.getText().toString()))
+                mPasswordTextInfoModel.ruleName = "";
+            else
+                mPasswordTextInfoModel.ruleName = mRuleName.getText().toString();
+            if (mPasswordRuleModels.size() == 0) {
+                initSingleCharModelList(mPassword.getText().toString());
+            }
+            mPasswordTextInfoModel.passwordPreview = mPasswordPreview.getText().toString();
             mPasswordTextInfoModel.realPassword = mPassword.getText().toString();
             mPasswordTextInfoModel.description = mDescriptionET.getText().toString();
             mPasswordTextInfoModel.time = TimeUtils.getCurrentTimeInString();
             saveToLocal();
         }
 
+    }
+
+    private void initSingleCharModelList(String realPassword) {
+        mPasswordRuleModels.clear();
+        char[] chars = realPassword.toCharArray();
+        for (int i = 0; i < chars.length; i++) {
+            SingleCharPasswordRuleModel ruleModel = new SingleCharPasswordRuleModel();
+            ruleModel.mRuleId = i;
+            ruleModel.mTargetChar = String.valueOf(chars[i]);
+            ruleModel.mDestinyChar = ruleModel.mTargetChar;
+            mPasswordRuleModels.add(ruleModel);
+        }
     }
 
     private Subscription mSubscription;
@@ -230,28 +272,27 @@ public class PasswordDetailActivity extends BaseActivity {
             public void call(Subscriber<? super String> subscriber) {
                 Gson gson = new Gson();
                 String jsonString = gson.toJson(mPasswordRuleModels);
-                long id = 0;
+                long id;
                 try {
                     String destiny = Sercurity.aesEncrypt(jsonString, ak);
                     String akString = new String(ak);
                     akString = String.copyValueOf(akString.toCharArray(), 0, ak.length);
-                    Log.d("akstring",akString);
-                    if (mIsAdd){
+                    Log.d("akstring", akString);
+                    if (mIsAdd) {
                         PasswordTextItem passwordTextItem = new PasswordTextItem(null,
                                 destiny, mPasswordTextInfoModel.description, akString,
                                 mPasswordTextInfoModel.time);
                         id = DBHelper.getInstance().getPasswordTextItemDao().insert(passwordTextItem);
                         mPasswordTextInfoModel.id = id;
-                    }else {
+                    } else {
+                        id = mPasswordTextInfoModel.id;
                         PasswordTextItem passwordTextItem = new PasswordTextItem(mPasswordTextInfoModel.id,
                                 destiny, mPasswordTextInfoModel.description, akString,
                                 mPasswordTextInfoModel.time);
-                        DBHelper.getInstance().getPasswordTextItemDao().refresh(passwordTextItem);
+                        DBHelper.getInstance().getPasswordTextItemDao().update(passwordTextItem);
                     }
-
                     mPasswordTextInfoModel.jsonString = destiny;
-                    if (id != 0)
-                        subscriber.onNext(id+"success");
+                    subscriber.onNext(id + "success");
                 } catch (Exception e) {
                     showToast(e.toString());
                     e.printStackTrace();
@@ -271,6 +312,7 @@ public class PasswordDetailActivity extends BaseActivity {
                 .subscribe(new Subscriber<String>() {
                     @Override
                     public void onCompleted() {
+                        showToast("compelte");
                     }
 
                     @Override
@@ -284,8 +326,23 @@ public class PasswordDetailActivity extends BaseActivity {
                         mIsAdd = false;
                         mMaterialDialogProgress.dismiss();
                         showToast(s);
+                        saveSuccess();
                     }
                 });
+    }
+
+    private void saveSuccess() {
+        if (RxBus.getInstance().hasObservers()) {
+            UpdatePasswordListEvent passwordListEvent = new UpdatePasswordListEvent();
+            passwordListEvent.mPasswordTextInfoModel = mPasswordTextInfoModel;
+            passwordListEvent.mIsAdd = mIsAdd;
+            passwordListEvent.position = mPosition;
+            RxBus.getInstance().send(passwordListEvent);
+        }
+//        Intent intent = new Intent();
+//        intent.putExtra("is_changed", true);
+//        setResult(RESULT_OK, intent);
+        onBackPressed();
     }
 
     private MaterialDialog mMaterialDialogProgress;

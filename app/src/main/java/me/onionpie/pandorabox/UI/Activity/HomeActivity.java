@@ -32,7 +32,7 @@ import me.onionpie.pandorabox.Utils.CommonPreference;
 
 public class HomeActivity extends BaseActivity
         implements NavigationView.OnNavigationItemSelectedListener, OnListFragmentInteractionListener {
-
+    private static final int OPENPASSWORDDETAIL = 10000;
     @Bind(R.id.toolbar)
     Toolbar mToolbar;
     @Bind(R.id.fab)
@@ -159,9 +159,22 @@ public class HomeActivity extends BaseActivity
     }
 
     @Override
-    public void onListFragmentInteraction(PasswordTextInfoModel item) {
-
+    public void onListFragmentInteraction(PasswordTextInfoModel item,int position) {
+        Intent intent = PasswordDetailActivity.getStartIntent(this,false,item,position);
+        startActivityForResult(intent,OPENPASSWORDDETAIL);
     }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if (resultCode == RESULT_OK){
+            switch (requestCode){
+                case OPENPASSWORDDETAIL:
+                    break;
+            }
+        }
+    }
+
     private void validate2DCode(){
         if (CommonPreference.getBoolean(this, Constans.QRCODE_VALID)){
 

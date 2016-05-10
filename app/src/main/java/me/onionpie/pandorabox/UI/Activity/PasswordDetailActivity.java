@@ -295,6 +295,7 @@ public class PasswordDetailActivity extends BaseActivity {
                                 mPasswordTextInfoModel.time);
                         DBHelper.getInstance().getPasswordTextItemDao().update(passwordTextItem);
                     }
+                    mPasswordTextInfoModel.akString = akString;
                     mPasswordTextInfoModel.jsonString = destiny;
                     subscriber.onNext(id + "success");
                 } catch (Exception e) {

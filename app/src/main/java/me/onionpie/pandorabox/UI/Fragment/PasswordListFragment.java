@@ -23,8 +23,10 @@ import java.util.List;
 
 import butterknife.Bind;
 import butterknife.ButterKnife;
+import de.greenrobot.dao.query.QueryBuilder;
 import me.onionpie.greendao.DBHelper;
 import me.onionpie.greendao.PasswordTextItem;
+import me.onionpie.greendao.PasswordTextItemDao;
 import me.onionpie.pandorabox.Model.PasswordTextInfoModel;
 import me.onionpie.pandorabox.Model.SingleCharPasswordRuleModel;
 import me.onionpie.pandorabox.R;
@@ -45,7 +47,7 @@ import rx.schedulers.Schedulers;
 
 /**
  * A fragment representing a list of Items.
- * <p/>
+ * <p>
  * Activities containing this fragment MUST implement the {@link OnListFragmentInteractionListener}
  * interface.
  */
@@ -79,18 +81,24 @@ public class PasswordListFragment extends BaseFragment {
                         UpdatePasswordListEvent updatePasswordListEvent = (UpdatePasswordListEvent) o;
                         if (updatePasswordListEvent.mIsAdd) {
 //                            mPasswordTextInfoModels.add(updatePasswordListEvent.mPasswordTextInfoModel);
-                            mPasswordTextInfoModels.add(0,updatePasswordListEvent.mPasswordTextInfoModel);
-                            mRecyclerViewItemArray.addBeforFirst(1,new ItemData<>(1,updatePasswordListEvent.mPasswordTextInfoModel));
+                            mPasswordTextInfoModels.add(0, updatePasswordListEvent.mPasswordTextInfoModel);
+                            mRecyclerViewItemArray.addBeforFirst(1, new ItemData<>(1, updatePasswordListEvent.mPasswordTextInfoModel));
 //                            mRecyclerViewItemArray.add(new ItemData<>(1, updatePasswordListEvent.mPasswordTextInfoModel));
-                            mRecyclerView.getAdapter().notifyItemInserted(0);
-                            mRecyclerView.getAdapter().notifyItemRangeChanged(0,mRecyclerViewItemArray.size());
+                            if (mRecyclerView != null) {
+                                mRecyclerView.getAdapter().notifyItemInserted(0);
+                                mRecyclerView.getAdapter().notifyItemRangeChanged(0, mRecyclerViewItemArray.size());
+                            }
+
                         } else {
                             mPasswordTextInfoModels.set(updatePasswordListEvent.position, updatePasswordListEvent.mPasswordTextInfoModel);
                             mRecyclerViewItemArray.set(updatePasswordListEvent.position, new ItemData<>(1, updatePasswordListEvent.mPasswordTextInfoModel));
-                            mRecyclerView.getAdapter().notifyDataSetChanged();
+                            if (mRecyclerView != null)
+                                mRecyclerView.getAdapter().notifyDataSetChanged();
                         }
-                        mRecyclerView.setVisibility(View.VISIBLE);
-                        mSonGokuLayout.setVisibility(View.GONE);
+                        if (mRecyclerView !=null){
+                            mRecyclerView.setVisibility(View.VISIBLE);
+                            mSonGokuLayout.setVisibility(View.GONE);
+                        }
 //                        if (mRecyclerView != null)
 //                            mRecyclerView.getAdapter().notifyDataSetChanged();
                     }
@@ -123,7 +131,10 @@ public class PasswordListFragment extends BaseFragment {
         mSubscription = Observable.create(new Observable.OnSubscribe<ArrayList<PasswordTextInfoModel>>() {
             @Override
             public void call(Subscriber<? super ArrayList<PasswordTextInfoModel>> subscriber) {
-                List<PasswordTextItem> passwordTextItems = DBHelper.getInstance().getPasswordTextItemDao().loadAll();
+//                List<PasswordTextItem> passwordTextItems = DBHelper.getInstance().getPasswordTextItemDao().loadAll();
+                PasswordTextItemDao passwordTextItemDao = DBHelper.getInstance().getPasswordTextItemDao();
+                List<PasswordTextItem> passwordTextItems = passwordTextItemDao.queryBuilder()
+                        .orderDesc(PasswordTextItemDao.Properties.Id).list();
                 ArrayList<PasswordTextInfoModel> passwordTextInfoModels = new ArrayList<PasswordTextInfoModel>();
                 for (PasswordTextItem temp : passwordTextItems) {
                     PasswordTextInfoModel passwordTextInfoModel = new PasswordTextInfoModel();
@@ -145,13 +156,19 @@ public class PasswordListFragment extends BaseFragment {
                         HashSet<String> ruleNames = new HashSet<String>();
                         for (SingleCharPasswordRuleModel singleCharPasswordRuleModel : singleCharPasswordRuleModels) {
                             realPassword += singleCharPasswordRuleModel.mTargetChar;
-                            ruleNames.add(singleCharPasswordRuleModel.mRuleName);
+                            if (!TextUtils.isEmpty(singleCharPasswordRuleModel.mRuleName))
+                                ruleNames.add(singleCharPasswordRuleModel.mRuleName);
                             passwordTextInfoModel.passwordPreview += singleCharPasswordRuleModel.mDestinyChar;
                         }
                         passwordTextInfoModel.realPassword = realPassword;
-                        for (String tempName : ruleNames) {
-                            passwordTextInfoModel.ruleName += tempName + ",";
+                        if (ruleNames.size() == 0) {
+                            passwordTextInfoModel.ruleName = "";
+                        } else {
+                            for (String tempName : ruleNames) {
+                                passwordTextInfoModel.ruleName += tempName + ",";
+                            }
                         }
+
                         if (passwordTextInfoModel.ruleName.endsWith(",")) {
                             passwordTextInfoModel.ruleName = passwordTextInfoModel.ruleName.substring(0, passwordTextInfoModel.ruleName.length() - 2);
                         }
@@ -199,11 +216,11 @@ public class PasswordListFragment extends BaseFragment {
             ItemData<PasswordTextInfoModel> infoModelItemData = new ItemData<>(1, textInfoModel);
             mRecyclerViewItemArray.add(infoModelItemData);
         }
-        if (mRecyclerViewItemArray.size()==0){
+        if (mRecyclerViewItemArray.size() == 0) {
             mSonGokuLayout.setVisibility(View.VISIBLE);
             mRecyclerView.setVisibility(View.GONE);
             mSonGokuLayout.setImageResource(R.mipmap.no_order_bg);
-        }else {
+        } else {
             mSonGokuLayout.setVisibility(View.GONE);
             mRecyclerView.setVisibility(View.VISIBLE);
         }
@@ -257,7 +274,7 @@ public class PasswordListFragment extends BaseFragment {
      * fragment to allow an interaction in this fragment to be communicated
      * to the activity and potentially other fragments contained in that
      * activity.
-     * <p/>
+     * <p>
      * See the Android Training lesson <a href=
      * "http://developer.android.com/training/basics/fragments/communicating.html"
      * >Communicating with Other Fragments</a> for more information.

@@ -1,27 +1,144 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout
+    android:id="@+id/base_background"
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:layout_gravity="center"
+    android:background="@color/light_blue"
     tools:context=".UI.Activity.WelcomeActivity">
-    <android.support.v4.view.ViewPager
-        android:id="@+id/view_pager"
+
+    <com.nightonke.wowoviewpager.WoWoViewPager
+        android:id="@+id/animation_view_pager"
         android:layout_width="match_parent"
         android:layout_height="match_parent">
 
-    </android.support.v4.view.ViewPager>
-    <me.relex.circleindicator.CircleIndicator
-        android:id="@+id/indicator"
-        android:layout_alignParentBottom="true"
+    </com.nightonke.wowoviewpager.WoWoViewPager>
+
+    <RelativeLayout
+        android:id="@+id/sub_base"
         android:layout_width="match_parent"
-        android:layout_height="48dp"/>
-    <Button
-        android:visibility="gone"
-        android:layout_alignParentBottom="true"
-        android:layout_centerHorizontal="true"
-        android:text="立即体验"
-        android:id="@+id/in"
+        android:layout_height="match_parent"
+        android:layout_centerInParent="true">
+
+
+        <TextView
+            android:id="@+id/safe"
+            android:layout_width="100dp"
+            android:layout_height="100dp"
+            android:layout_centerInParent="true"
+            android:background="@drawable/welcome_bg"
+            android:gravity="center"
+            android:text="安全"
+            android:textColor="@color/white"
+            android:textSize="30sp"
+            android:textStyle="bold"
+            />
+
+        <TextView
+            android:id="@+id/efficient"
+            android:layout_width="100dp"
+            android:layout_height="100dp"
+            android:layout_centerInParent="true"
+            android:background="@drawable/welcome_bg"
+            android:gravity="center"
+            android:text="效率"
+            android:textColor="@color/white"
+            android:textSize="30sp"
+            android:textStyle="bold"
+            />
+
+        <TextView
+            android:id="@+id/convenience"
+            android:layout_width="100dp"
+            android:layout_height="100dp"
+            android:layout_centerInParent="true"
+            android:layout_marginLeft="100dp"
+            android:layout_marginTop="100dp"
+            android:background="@drawable/welcome_bg"
+            android:gravity="center"
+            android:text="方便"
+            android:textColor="@color/white"
+            android:textSize="30sp"
+            android:textStyle="bold"
+            />
+
+        <TextView
+            android:id="@+id/convenience_description"
+            android:layout_width="wrap_content"
+            android:layout_height="50dp"
+            android:layout_below="@id/convenience"
+            android:layout_centerInParent="true"
+            android:textSize="15sp"
+            android:textColor="@color/white"
+            android:layout_marginBottom="-30dp"
+            android:gravity="center"
+            android:text="不用再记各种密码"/>
+
+        <TextView
+            android:id="@+id/efficient_description"
+            android:layout_width="wrap_content"
+            android:layout_height="50dp"
+            android:layout_alignParentBottom="true"
+            android:layout_centerInParent="true"
+            android:textSize="15sp"
+            android:textColor="@color/white"
+            android:layout_marginBottom="-50dp"
+            android:gravity="center"
+            android:text="提高生活效率"/>
+
+        <TextView
+            android:id="@+id/safe_description"
+            android:layout_width="wrap_content"
+            android:layout_height="50dp"
+            android:layout_alignParentBottom="true"
+            android:textSize="15sp"
+            android:textColor="@color/white"
+            android:layout_centerHorizontal="true"
+            android:layout_marginBottom="-50dp"
+            android:gravity="center"
+            android:text="密码安全的被保存"/>
+
+
+        <ImageView
+            android:id="@+id/open_key"
+            android:src="@drawable/ic_vpn_key_black_24dp"
+            android:scaleType="centerCrop"
+            android:layout_width="80dp"
+            android:layout_height="60dp"
+            android:layout_alignParentTop="true"
+            android:layout_centerHorizontal="true"
+            android:layout_marginTop="-60dp"
+            android:text="立即体验"/>
+    </RelativeLayout>
+
+    <FrameLayout
         android:layout_width="wrap_content"
-        android:layout_height="wrap_content"/>
+        android:layout_height="wrap_content"
+        android:visibility="gone">
+
+        <android.support.v4.view.ViewPager
+            android:id="@+id/view_pager"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+
+        </android.support.v4.view.ViewPager>
+
+        <me.relex.circleindicator.CircleIndicator
+            android:id="@+id/indicator"
+            android:layout_width="match_parent"
+            android:layout_height="48dp"
+            android:layout_alignParentBottom="true"/>
+
+        <Button
+            android:id="@+id/in"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentBottom="true"
+            android:layout_centerHorizontal="true"
+            android:text="立即体验"
+            android:visibility="gone"/>
+    </FrameLayout>
+
 </RelativeLayout>

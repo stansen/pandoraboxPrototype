@@ -32,7 +32,7 @@ public class FirstActivity extends Activity {
                 }
                 finish();
             }
-        }, 2000);
+        }, 1000);
     }
 }
 

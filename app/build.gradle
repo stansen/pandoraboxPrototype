@@ -52,5 +52,5 @@ dependencies {
     compile 'com.google.code.gson:gson:2.6.2'
     compile 'com.rengwuxian.materialedittext:library:2.1.4'
     compile 'org.greenrobot:greendao:2.2.0'
-    compile 'com.nightonke:wowoviewpager:1.0.2'
+        compile 'com.nightonke:wowoviewpager:1.0.2'
 }

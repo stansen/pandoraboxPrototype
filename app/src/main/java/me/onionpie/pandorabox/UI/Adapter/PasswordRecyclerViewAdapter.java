@@ -8,6 +8,7 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.TextView;
 
+import me.onionpie.greendao.DBHelper;
 import me.onionpie.pandorabox.Animation.RecyclerView.GoogleAnimationRecyclerAdapter;
 import me.onionpie.pandorabox.Model.PasswordTextInfoModel;
 import me.onionpie.pandorabox.R;
@@ -67,6 +68,7 @@ public class PasswordRecyclerViewAdapter extends GoogleAnimationRecyclerAdapter 
             viewHolder.mDelete.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
+                    DBHelper.getInstance().getPasswordTextItemDao().deleteByKey(viewHolder.mItem.id);
                     mRecyclerViewItemArray.remove(holder.getAdapterPosition());
                     notifyItemRemoved(holder.getLayoutPosition());
 //                notifyItemRangeRemoved(position,mRecyclerViewItemArray.);

@@ -54,7 +54,7 @@ public class HomeActivity extends BaseActivity
         setSupportActionBar(mToolbar);
         mDoubleClickExitHelper = new DoubleClickExitHelper(this);
 //        StatusBarCompat.compat(this, getResources().getColor(R.color.colorPrimary));
-        RxView.clicks(mFab).throttleFirst(500, TimeUnit.MILLISECONDS).subscribe(new Action1<Void>() {
+        RxView.clicks(mFab).throttleFirst(1000, TimeUnit.MILLISECONDS).subscribe(new Action1<Void>() {
             @Override
             public void call(Void aVoid) {
                 mFab.setOnClickListener(new View.OnClickListener() {

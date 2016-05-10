@@ -1,9 +1,11 @@
 package me.onionpie.pandorabox.UI.Activity;
 
 import android.content.Intent;
+import android.graphics.Path;
 import android.os.Bundle;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
+import android.view.View;
 import android.view.ViewGroup;
 import android.view.Window;
 import android.view.WindowManager;
@@ -14,6 +16,8 @@ import com.nightonke.wowoviewpager.Color.ColorChangeType;
 import com.nightonke.wowoviewpager.Eases.EaseType;
 import com.nightonke.wowoviewpager.ViewAnimation;
 import com.nightonke.wowoviewpager.WoWoBackgroundColorAnimation;
+import com.nightonke.wowoviewpager.WoWoPathAnimation;
+import com.nightonke.wowoviewpager.WoWoPathView;
 import com.nightonke.wowoviewpager.WoWoTranslationAnimation;
 import com.nightonke.wowoviewpager.WoWoUtil;
 import com.nightonke.wowoviewpager.WoWoViewPager;
@@ -102,11 +106,95 @@ public class WelcomeActivity extends AppCompatActivity {
 
         setBase();
         circleTitle();
+//        setPath();
+        setMyPath();
         descriptionAnimation();
         setOpenKey();
+        setBox();
 //        setPath();
     }
 
+
+    private void setMyPath() {
+        int startingX = 50, startingY = 118;
+        int firstX = 265, firstY = 426, secondX = 304, secondY = 22, endingX = 542, endingY = 237;
+        Path path = new Path();
+
+
+        WoWoPathView pathView = (WoWoPathView) findViewById(R.id.pathview);
+        ViewGroup.LayoutParams layoutParams = pathView.getLayoutParams();
+        layoutParams.height = screenH;
+        // set the pathView a little wider,
+        // then the airplane can hide
+        layoutParams.width = screenW + 200;
+        pathView.setLayoutParams(layoutParams);
+        int xoff = 100;
+        int yoff = 350;
+        float xScale = 2f;
+        float yScale = 1;
+        path.moveTo(startingX+xoff, startingY+yoff);
+        path.cubicTo(xScale*(firstX+xoff), firstY+yoff, xScale*(secondX+xoff), secondY+yoff, xScale*(xoff+endingX), endingY+yoff);
+        pathView.setPath(path);
+        ViewAnimation animation = new ViewAnimation(pathView);
+        animation.addPageAnimaition(new WoWoPathAnimation(
+                0, 0f, 1f,
+                EaseType.Linear,
+                true));
+        mWoWoViewPager.addAnimation(animation);
+    }
+
+    private void setPath() {
+        WoWoPathView pathView = (WoWoPathView) findViewById(R.id.pathview);
+        ViewGroup.LayoutParams layoutParams = pathView.getLayoutParams();
+        layoutParams.height = screenH;
+        // set the pathView a little wider,
+        // then the airplane can hide
+        layoutParams.width = screenW + 200;
+        pathView.setLayoutParams(layoutParams);
+
+        // use this to adjust the path
+        int xoff = -300;
+        int yoff = screenH - 616 - 300;
+        float xScale = 1.5f;
+        float yScale = 1;
+
+        Path path = new Path();
+        path.moveTo(xScale * (565 + xoff), screenH + yoff);
+        path.cubicTo(
+                xScale * (509 + xoff), yScale * (385 + yoff),
+                xScale * (144 + xoff), yScale * (272 + yoff),
+                xScale * (394 + xoff), yScale * (144 + yoff));
+        path.cubicTo(
+                xScale * (477 + xoff), yScale * (99 + yoff),
+                xScale * (596 + xoff), yScale * (91 + yoff),
+                xScale * (697 + xoff), yScale * (128 + yoff));
+        path.cubicTo(
+                xScale * (850 + xoff), yScale * (189 + yoff),
+                xScale * (803 + xoff), yScale * (324 + yoff),
+                xScale * (66 + xoff), yScale * (307 + yoff));
+
+        // set the path to pathView
+        pathView.setPath(path);
+        ViewAnimation animation = new ViewAnimation(pathView);
+        animation.addPageAnimaition(new WoWoPathAnimation(
+                0, 0f, 1f,
+                EaseType.Linear,
+                true));
+        mWoWoViewPager.addAnimation(animation);
+    }
+    private void setBox(){
+        ImageView openkey = (ImageView) findViewById(R.id.drop_box);
+        ViewAnimation viewAnimation = new ViewAnimation(openkey);
+        viewAnimation.addPageAnimaition(new WoWoTranslationAnimation(
+                2, 0, 1,
+                openkey.getTranslationX(),
+                openkey.getTranslationY(),
+                screenW/2+WoWoUtil.dp2px(60,this),
+                0,
+                EaseType.EaseOutBack, true
+        ));
+        mWoWoViewPager.addAnimation(viewAnimation);
+    }
     private void setBase() {
         ViewAnimation animation = new ViewAnimation(findViewById(R.id.base_background));
         animation.addPageAnimaition(new WoWoBackgroundColorAnimation(
@@ -126,7 +214,7 @@ public class WelcomeActivity extends AppCompatActivity {
                 true
         ));
         animation.addPageAnimaition(new WoWoBackgroundColorAnimation(
-                1, 0, 1,
+                2, 0, 1,
                 ContextCompat.getColor(this, R.color.kgps_text_color11),
                 ContextCompat.getColor(this, R.color.grey300),
                 ColorChangeType.RGB,
@@ -228,13 +316,19 @@ public class WelcomeActivity extends AppCompatActivity {
         ImageView openkey = (ImageView) findViewById(R.id.open_key);
         ViewAnimation viewAnimation = new ViewAnimation(openkey);
         viewAnimation.addPageAnimaition(new WoWoTranslationAnimation(
-                3, 0, 1,
+                2, 0, 1,
                 openkey.getTranslationX(),
                 openkey.getTranslationY(),
                 0,
                 screenH - WoWoUtil.dp2px(150, this),
                 EaseType.EaseOutBack, true
         ));
+        openkey.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                saveFirstTimeOpenStatus();
+            }
+        });
         mWoWoViewPager.addAnimation(viewAnimation);
     }
 //    private void initView() {
@@ -262,10 +356,11 @@ public class WelcomeActivity extends AppCompatActivity {
 //    }
 
     public void saveFirstTimeOpenStatus() {
-        CommonPreference.putBoolean(this, Constans.KEY_IS_APP_FIRST_TIME_OPEN, true);
+//        CommonPreference.putBoolean(this, Constans.KEY_IS_APP_FIRST_TIME_OPEN, true);
         Intent in = new Intent(this, HomeActivity.class);
         startActivity(in);
-        AppManager.getAppManager().finishActivity();
+        finish();
+//        AppManager.getAppManager().finishActivity();
     }
 
 }

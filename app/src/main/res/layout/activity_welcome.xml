@@ -7,7 +7,8 @@
     android:layout_height="match_parent"
     android:layout_gravity="center"
     android:background="@color/light_blue"
-    tools:context=".UI.Activity.WelcomeActivity">
+    tools:context=".UI.Activity.WelcomeActivity"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
 
     <com.nightonke.wowoviewpager.WoWoViewPager
         android:id="@+id/animation_view_pager"
@@ -15,6 +16,7 @@
         android:layout_height="match_parent">
 
     </com.nightonke.wowoviewpager.WoWoViewPager>
+
 
     <RelativeLayout
         android:id="@+id/sub_base"
@@ -100,7 +102,26 @@
             android:gravity="center"
             android:text="密码安全的被保存"/>
 
-
+        <com.nightonke.wowoviewpager.WoWoPathView
+            android:id="@+id/pathview"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:background="@android:color/transparent"
+            app:pathColor="@color/white"
+            app:pathWidth="5"
+            app:headImageId="@drawable/airplane"
+            app:headImageWidth="180"
+            />
+        <ImageView
+            android:id="@+id/drop_box"
+            android:layout_centerInParent="true"
+            android:layout_centerVertical="true"
+            android:layout_alignParentLeft="true"
+            android:layout_marginLeft="-120dp"
+            android:scaleType="centerInside"
+            android:src="@drawable/drop_box"
+            android:layout_width="120dp"
+            android:layout_height="120dp"/>
         <ImageView
             android:id="@+id/open_key"
             android:src="@drawable/ic_vpn_key_black_24dp"

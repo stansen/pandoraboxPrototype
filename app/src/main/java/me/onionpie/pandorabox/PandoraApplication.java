@@ -3,6 +3,8 @@ package me.onionpie.pandorabox;
 import android.app.Application;
 import android.content.Context;
 
+import org.xmlpull.v1.XmlPullParser;
+
 import me.onionpie.greendao.DBHelper;
 
 /**
@@ -11,7 +13,9 @@ import me.onionpie.greendao.DBHelper;
 public class PandoraApplication extends Application {
     private static Context mApplicationContext;
     private static PandoraApplication mInstance;
-
+    public static byte[] ak = new byte[16];
+    public static String phone="";
+    public static String toke="";
     public static Context getmApplicationContext() {
         return mApplicationContext;
     }
@@ -25,8 +29,12 @@ public class PandoraApplication extends Application {
         super.onCreate();
         mApplicationContext = this;
         mInstance = this;
+        ak = getIV();
         DBHelper.init(this);
     }
 
-
+    private byte[] getIV() {
+        String iv = "1234567812345678"; //IV length: must be 16 bytes long
+        return iv.getBytes();
+    }
 }

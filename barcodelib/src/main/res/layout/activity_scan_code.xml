@@ -1,38 +1,54 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout
+<RelativeLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:orientation="vertical"
     tools:context="com.example.jiudeng007.barcodelib.ScanCodeActivity">
+
+
+
     <android.support.design.widget.TextInputLayout
-        app:errorEnabled="true"
+        android:layout_marginTop="40dp"
+        android:id="@+id/text_input_layout"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content">
+        android:layout_height="wrap_content"
+        app:errorEnabled="true">
+
         <EditText
             android:id="@+id/scan_code_secret_key"
-            android:hint="@string/scan_code_key_hint"
-            android:digits="1234567890qwertyuiopasdfghjklzxcvbnm"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"/>
+            android:layout_height="wrap_content"
+            android:digits="1234567890qwertyuiopasdfghjklzxcvbnm"
+            android:hint="@string/scan_code_key_hint"/>
     </android.support.design.widget.TextInputLayout>
+
     <Button
         android:id="@+id/confirm"
-        android:text="确定生成"
         android:layout_width="wrap_content"
-        android:layout_height="wrap_content"/>
+        android:layout_height="wrap_content"
+        android:layout_alignParentRight="true"
+        android:layout_below="@id/text_input_layout"
+        android:background="@drawable/button_round_corner_bg"
+        android:text="确定生成"
+        android:layout_marginTop="20dp"
+        android:layout_marginRight="20dp"
+        android:textColor="@color/white"/>
+
     <ImageView
         android:id="@+id/scan_code_image"
-        android:layout_gravity="center"
-        android:layout_width="150dp"
-        android:layout_height="150dp"/>
+        android:layout_width="200dp"
+        android:layout_height="200dp"
+        android:layout_centerInParent="true"/>
+
     <Button
         android:id="@+id/choose"
+        android:visibility="gone"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="center|bottom"
         android:text="@string/choose"/>
 
-</LinearLayout>
+</RelativeLayout>

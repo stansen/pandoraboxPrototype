@@ -1,1 +1,1 @@
-include ':app', ':barcodelib', ':daogen'
+include ':app', ':barcodelib', ':daogen', ':rxjavahttprequest'

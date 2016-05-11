@@ -8,4 +8,85 @@
     <color name="viewfinder_mask">#60000000</color>
     <color name="viewfinder_laser">#ffcc0000</color>
     <color name="viewfinder_border">#ffafed44</color>
+
+
+    <color name="white">#FFFFFF</color>
+    <!--白色 -->
+
+    <color name="red">#FF0000</color><!--红色 -->
+    <color name="whitesmoke">#F5F5F5</color>
+    <!--烟白色 -->
+
+    <color name="lightgray">#D3D3D3</color>
+    <!--亮灰色 -->
+    <color name="lightgrey">#D3D3D3</color>
+    <!--亮灰色 -->
+
+    <color name="blueviolet">#8A2BE2</color>
+    <!--紫罗兰蓝色 -->
+    <color name="lightskyblue">#87CEFA</color>
+    <!--亮天蓝色 -->
+    <color name="skyblue">#87CEEB</color>
+    <!--天蓝色 -->
+    <color name="gray">#808080</color>
+    <!--灰色 -->
+    <color name="grey">#808080</color>
+    <!--灰色 -->
+
+    <color name="slategray">#708090</color>
+    <!--灰石色 -->
+    <color name="slategrey">#708090</color>
+    <!--灰石色 -->
+
+    <color name="black">#000000</color>
+    <!--黑色 -->
+    <color name="launcher">#D3D3D3</color>
+    <color name="q_and_a_button">#40b4eb</color>
+    <color name="button_clicked">#AADDF3</color>
+    <color name="Translucent">#88FFFFFF</color>
+    <!--半透明--> <color name="transparent">#00000000</color>
+
+    <color name="Login_blue">#006AA6</color>
+    <color name="list_view">#D0F0FB</color>
+    <color name="summary_text">#59C9F0</color>
+    <color name="light_grey">#EDEDED</color>
+    <color name="translucent_blue">#7fff0000</color>
+    <color name="kgps_title">#3ca0c4</color>
+    <color name="kgps_forget_psw">#3985ff</color>
+    <color name="kgps_text_color1">#cccccc</color>
+    <color name="kgps_text_color2">#5f646e</color>
+    <color name="kgps_text_color3">#999999</color>
+    <color name="kgps_text_color4">#3d4245</color>
+    <color name="text_color5">#969696</color>
+    <color name="kgps_text_color6">#b2b2b2</color>
+    <color name="kgps_text_color7">#6f6f6f</color>
+    <color name="kgps_text_color8">#ababab</color>
+    <color name="kgps_text_color9">#cbcbcb</color>
+    <color name="kgps_text_color10">#828282</color>
+    <color name="kgps_text_color11">#eab52c</color>
+    <color name="kgps_text_color_12">#373737</color>
+    <color name="kgps_text_color_13">#4eb8de</color>
+    <color name="kgps_text_color_14">#ccced1</color>
+    <color name="kgps_text_color_15">#b8b8b8</color>
+    <color name="kgps_text_color_16">#737373</color>
+    <color name="window_background">#FFF5F5F5</color>
+    <color name="home_page_color">#3ca0c4</color>
+    <color name="deep_blue">#1E799A</color>
+    <color name="button_action">#FF6FDC98</color>
+    <color name="transparent_1">#55000000</color>
+    <color name="grey300">#9d76e7</color>
+
+    <color name="touch_effect">#9ccc</color>
+    <color name="delete_color">#f05a59</color>
+
+
+    <color name="background_bg">#fafafa</color>
+    <color name="blue_1">#fff</color>
+    <color name="blue_2">#c4caeb</color>
+    <color name="blue_3">#929dd9</color>
+
+    <color name="green">#00ff00</color>
+    <color name="blue">#0000ff</color>
+    <color name="light_blue">#13BFFF</color>
+    <color name="my_pink">#E91E63</color>
 </resources>

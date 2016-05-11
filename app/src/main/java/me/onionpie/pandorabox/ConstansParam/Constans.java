@@ -15,4 +15,8 @@ public class Constans {
 
     public static final String KEY_AES_AK = "aes_ak";
 
+    public static final String KEY_IS_USER_LOGIN = "is_user_login";
+
+    public static final String KEY_SCAN_CODE_VALUE = "scan_code_value";
+
 }

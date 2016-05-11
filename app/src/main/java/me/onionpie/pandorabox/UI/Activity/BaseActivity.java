@@ -15,13 +15,20 @@ import android.view.inputmethod.InputMethodManager;
 import android.widget.EditText;
 
 import com.afollestad.materialdialogs.MaterialDialog;
+import com.jakewharton.rxbinding.view.RxView;
+
+import java.util.concurrent.TimeUnit;
 
 import me.onionpie.pandorabox.R;
 import me.onionpie.pandorabox.Utils.AppManager;
 import me.onionpie.pandorabox.Utils.CustomToast;
+import rx.Subscription;
+import rx.functions.Action1;
+import rx.subscriptions.CompositeSubscription;
 
 public class BaseActivity extends AppCompatActivity {
     private MaterialDialog mMaterialDialog;
+    private CompositeSubscription mCompositeSubscription;
 //    Navigator mNavigator;
 
     @Override
@@ -29,6 +36,7 @@ public class BaseActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_base);
 //        setOrientation();
+        mCompositeSubscription = new CompositeSubscription();
         AppManager.getAppManager().addActivity(this);
     }
 
@@ -46,6 +54,34 @@ public class BaseActivity extends AppCompatActivity {
         return getClass().getName();
     }
 
+    protected void setClickListener(View view){
+        setClickListener(view, 1000);
+    }
+
+    protected void setClickListener(final View view, int delay){
+
+        addSubscription(RxView.clicks(view)
+                .throttleFirst(delay, TimeUnit.MILLISECONDS)
+                .subscribe(new Action1<Void>() {
+                    @Override
+                    public void call(Void aVoid) {
+                        click(view);
+                    }
+                }));
+    }
+
+    protected void click(View view){
+
+    }
+
+    public void addSubscription(Subscription s) {
+        mCompositeSubscription.add(s);
+    }
+
+    public CompositeSubscription getSubscription(){
+        return mCompositeSubscription;
+    }
+
 
     @Override
     public void onBackPressed() {
@@ -56,6 +92,10 @@ public class BaseActivity extends AppCompatActivity {
     @Override
     protected void onDestroy() {
         super.onDestroy();
+        if (mCompositeSubscription != null) {
+            mCompositeSubscription.clear();
+            mCompositeSubscription = null;
+        }
         AppManager.getAppManager().finishActivity(this);
     }
 

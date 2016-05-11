@@ -9,10 +9,13 @@ import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.KeyEvent;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.LinearLayout;
+import android.widget.TextView;
 
 import com.afollestad.materialdialogs.DialogAction;
 import com.afollestad.materialdialogs.MaterialDialog;
@@ -24,9 +27,12 @@ import java.util.concurrent.TimeUnit;
 import butterknife.Bind;
 import butterknife.ButterKnife;
 import me.onionpie.pandorabox.ConstansParam.Constans;
+import me.onionpie.pandorabox.ConstansParam.KeyParam;
 import me.onionpie.pandorabox.Helper.DoubleClickExitHelper;
 import me.onionpie.pandorabox.Model.PasswordTextInfoModel;
+import me.onionpie.pandorabox.PandoraApplication;
 import me.onionpie.pandorabox.R;
+import me.onionpie.pandorabox.UI.Fragment.CodeGenerateFragment;
 import me.onionpie.pandorabox.UI.Fragment.PasswordListFragment;
 import me.onionpie.pandorabox.UI.Fragment.PasswordListFragment.OnListFragmentInteractionListener;
 import me.onionpie.pandorabox.UI.Fragment.PasswordRuleFragment;
@@ -46,6 +52,7 @@ public class HomeActivity extends BaseActivity
     @Bind(R.id.drawer_layout)
     DrawerLayout mDrawerLayout;
     DoubleClickExitHelper mDoubleClickExitHelper;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -103,6 +110,28 @@ public class HomeActivity extends BaseActivity
         mNavView.setCheckedItem(R.id.password_list);
         replaceFragment(R.id.main_content_container, new PasswordListFragment());
         mToolbar.setTitle(getString(R.string.password_list));
+        setNavViewHeader();
+    }
+
+    private void setNavViewHeader() {
+        View view = mNavView.getHeaderView(0);
+        LinearLayout linearLayout = (LinearLayout)view.findViewById(R.id.container);
+        final TextView textView = (TextView)view.findViewById(R.id.title) ;
+        textView.setText(PandoraApplication.phone);
+        linearLayout.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (CommonPreference.getBoolean(HomeActivity.this, Constans.KEY_IS_USER_LOGIN)){
+                    //登录
+                    Log.v("is_login","true");
+                }else {
+                    //未登录
+                    Log.v("is_login","false");
+                    Intent intent = new Intent(HomeActivity.this,LoginActivity.class);
+                    startActivity(intent);
+                }
+            }
+        });
     }
 
     @Override
@@ -153,8 +182,8 @@ public class HomeActivity extends BaseActivity
             // Handle the camera action
         } else if (id == R.id.password_rule_setting) {
             replaceFragment(R.id.main_content_container, new PasswordRuleFragment());
-        } else if (id == R.id.nav_slideshow) {
-
+        } else if (id == R.id.generate_code) {
+            replaceFragment(R.id.main_content_container, new CodeGenerateFragment());
         } else if (id == R.id.nav_manage) {
 
         } else if (id == R.id.nav_scan_code) {
@@ -170,26 +199,26 @@ public class HomeActivity extends BaseActivity
     }
 
     @Override
-    public void onListFragmentInteraction(PasswordTextInfoModel item,int position) {
-        Intent intent = PasswordDetailActivity.getStartIntent(this,false,item,position);
-        startActivityForResult(intent,OPENPASSWORDDETAIL);
+    public void onListFragmentInteraction(PasswordTextInfoModel item, int position) {
+        Intent intent = PasswordDetailActivity.getStartIntent(this, false, item, position);
+        startActivityForResult(intent, OPENPASSWORDDETAIL);
     }
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
-        if (resultCode == RESULT_OK){
-            switch (requestCode){
+        if (resultCode == RESULT_OK) {
+            switch (requestCode) {
                 case OPENPASSWORDDETAIL:
                     break;
             }
         }
     }
 
-    private void validate2DCode(){
-        if (CommonPreference.getBoolean(this, Constans.QRCODE_VALID)){
+    private void validate2DCode() {
+        if (CommonPreference.getBoolean(this, Constans.QRCODE_VALID)) {
 
-        }else {
+        } else {
 
         }
     }

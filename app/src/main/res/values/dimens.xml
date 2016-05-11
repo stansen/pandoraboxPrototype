@@ -17,7 +17,6 @@
     <dimen name="spacing_huge">72dp</dimen>
 
 
-
     <dimen name="elevation_header">4dp</dimen>
 
     <dimen name="min_height_touch_target">48dp</dimen>

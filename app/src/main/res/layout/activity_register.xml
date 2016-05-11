@@ -1,0 +1,80 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    tools:context="me.onionpie.pandorabox.UI.Activity.RegisterActivity">
+    <ImageView
+        android:id="@+id/register_icon"
+        android:layout_gravity="center_horizontal"
+        android:layout_width="80dp"
+        android:layout_height="80dp"
+        android:layout_below="@+id/back"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="45dp"
+        android:src="@mipmap/jd_l_head_icon" />
+    <com.rengwuxian.materialedittext.MaterialEditText
+        android:layout_marginTop="20dp"
+        android:id="@+id/account_name"
+        style="@style/EditTextStyle"
+        android:drawableLeft="@mipmap/jd_s_tel_icon"
+        android:digits="@string/limit_input_word"
+        android:hint="@string/phone"
+        android:inputType="phone"
+        android:textColorHint="@color/text_color5"/>
+    <LinearLayout
+        android:orientation="horizontal"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+        <com.rengwuxian.materialedittext.MaterialEditText
+            android:layout_marginTop="20dp"
+            android:id="@+id/auth_code"
+            style="@style/EditTextStyle"
+            android:layout_weight="1"
+            android:drawableLeft="@mipmap/jd_s_code_icon"
+            android:digits="@string/limit_input_word"
+            android:hint="@string/auth_code"
+            android:textColorHint="@color/text_color5"/>
+        <Button
+            android:id="@+id/send_auth_code"
+            android:layout_gravity="bottom"
+            android:layout_marginBottom="5dp"
+            android:layout_width="wrap_content"
+            android:layout_height="23dp"
+            android:layout_alignParentRight="true"
+            android:background="@drawable/clickable_bg"
+            android:text="@string/send_auth_code"
+            android:textColor="@color/delete_color"
+            android:textSize="14dp" />
+    </LinearLayout>
+
+    <com.rengwuxian.materialedittext.MaterialEditText
+        android:layout_marginTop="20dp"
+        android:id="@+id/password"
+        style="@style/EditTextStyle"
+        android:drawableLeft="@mipmap/jd_s_tel_icon"
+        android:digits="@string/limit_input_word"
+        android:hint="@string/password"
+        android:textColorHint="@color/text_color5"/>
+    <com.rengwuxian.materialedittext.MaterialEditText
+        android:layout_marginTop="20dp"
+        android:id="@+id/password_confirm"
+        style="@style/EditTextStyle"
+        android:drawableLeft="@mipmap/jd_s_tel_icon"
+        android:digits="@string/limit_input_word"
+        android:hint="@string/confirm_password"
+        android:textColorHint="@color/text_color5"/>
+    <Button
+        android:id="@+id/to_register"
+        android:layout_width="110dp"
+        android:layout_height="35dp"
+        android:layout_centerHorizontal="true"
+        android:layout_gravity="center_horizontal"
+        android:layout_marginTop="40dp"
+        android:background="@drawable/button_round_corner_bg"
+        android:enabled="true"
+        android:text="@string/register"
+        android:textColor="@color/white" />
+</LinearLayout>

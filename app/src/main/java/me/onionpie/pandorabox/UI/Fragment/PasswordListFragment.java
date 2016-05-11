@@ -219,7 +219,7 @@ public class PasswordListFragment extends BaseFragment {
         if (mRecyclerViewItemArray.size() == 0) {
             mSonGokuLayout.setVisibility(View.VISIBLE);
             mRecyclerView.setVisibility(View.GONE);
-            mSonGokuLayout.setImageResource(R.mipmap.no_order_bg);
+            mSonGokuLayout.setImageResource(R.mipmap.no_order_bg_meitu_1);
         } else {
             mSonGokuLayout.setVisibility(View.GONE);
             mRecyclerView.setVisibility(View.VISIBLE);

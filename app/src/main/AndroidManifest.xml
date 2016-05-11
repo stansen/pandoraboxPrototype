@@ -17,22 +17,21 @@
         <activity
             android:name=".UI.Activity.WelcomeActivity"
             android:screenOrientation="portrait">
-
         </activity>
         <activity
             android:name=".UI.Activity.HomeActivity"
             android:label="@string/password_list"
-            android:screenOrientation="portrait">
-
-        </activity>
-        <activity
-            android:name=".UI.Activity.FirstActivity"
             android:screenOrientation="portrait">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN"/>
 
                 <category android:name="android.intent.category.LAUNCHER"/>
             </intent-filter>
+        </activity>
+        <activity
+            android:name=".UI.Activity.FirstActivity"
+            android:screenOrientation="portrait">
+
         </activity>
         <activity android:name=".UI.Activity.PasswordDetailActivity">
         </activity>
@@ -44,8 +43,13 @@
         </service>
 
         <activity android:name=".UI.Activity.RuleSettingActivity">
-            <meta-data android:name="android.support.PARENT_ACTIVITY"
-                       android:value=".UI.Activity.PasswordDetailActivity" />
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value=".UI.Activity.PasswordDetailActivity"/>
+        </activity>
+        <activity android:name=".UI.Activity.LoginActivity">
+        </activity>
+        <activity android:name=".UI.Activity.RegisterActivity">
         </activity>
     </application>
 

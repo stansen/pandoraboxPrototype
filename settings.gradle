@@ -1,1 +1,1 @@
-include ':app', ':barcodelib', ':daogen', ':wowoviewpager'
+include ':app', ':barcodelib', ':daogen'

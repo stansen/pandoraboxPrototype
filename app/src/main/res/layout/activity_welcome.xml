@@ -117,7 +117,7 @@
             android:layout_centerInParent="true"
             android:layout_centerVertical="true"
             android:layout_alignParentLeft="true"
-            android:layout_marginLeft="-120dp"
+            android:layout_marginLeft="-140dp"
             android:scaleType="centerInside"
             android:src="@drawable/drop_box"
             android:layout_width="120dp"

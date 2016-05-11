@@ -6,9 +6,6 @@
       <module fileurl="file://$PROJECT_DIR$/app/app.iml" filepath="$PROJECT_DIR$/app/app.iml" />
       <module fileurl="file://$PROJECT_DIR$/barcodelib/barcodelib.iml" filepath="$PROJECT_DIR$/barcodelib/barcodelib.iml" />
       <module fileurl="file://$PROJECT_DIR$/daogen/daogen.iml" filepath="$PROJECT_DIR$/daogen/daogen.iml" />
-      <module fileurl="file://$PROJECT_DIR$/wowoviewpager/wowoviewpager.iml" filepath="$PROJECT_DIR$/wowoviewpager/wowoviewpager.iml" />
-      <module fileurl="file://$PROJECT_DIR$/wowoviewpager/wowoviewpager.iml" filepath="$PROJECT_DIR$/wowoviewpager/wowoviewpager.iml" />
-      <module fileurl="file://$PROJECT_DIR$/wowoviewpager/wowoviewpager.iml" filepath="$PROJECT_DIR$/wowoviewpager/wowoviewpager.iml" />
     </modules>
   </component>
 </project>

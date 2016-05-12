@@ -26,7 +26,7 @@ public class PasswordTextItemDao extends AbstractDao<PasswordTextItem, Long> {
         public final static Property Id = new Property(0, Long.class, "id", true, "_id");
         public final static Property JsonString = new Property(1, String.class, "jsonString", false, "JSON_STRING");
         public final static Property Description = new Property(2, String.class, "description", false, "DESCRIPTION");
-        public final static Property Ak = new Property(3, String.class, "ak", false, "AK");
+        public final static Property Ak = new Property(3, String.class, "scanCodeAk", false, "AK");
         public final static Property Date = new Property(4, String.class, "date", false, "DATE");
     };
 
@@ -46,7 +46,7 @@ public class PasswordTextItemDao extends AbstractDao<PasswordTextItem, Long> {
                 "\"_id\" INTEGER PRIMARY KEY AUTOINCREMENT ," + // 0: id
                 "\"JSON_STRING\" TEXT NOT NULL ," + // 1: jsonString
                 "\"DESCRIPTION\" TEXT," + // 2: description
-                "\"AK\" TEXT," + // 3: ak
+                "\"AK\" TEXT," + // 3: scanCodeAk
                 "\"DATE\" TEXT);"); // 4: date
     }
 
@@ -96,7 +96,7 @@ public class PasswordTextItemDao extends AbstractDao<PasswordTextItem, Long> {
             cursor.isNull(offset + 0) ? null : cursor.getLong(offset + 0), // id
             cursor.getString(offset + 1), // jsonString
             cursor.isNull(offset + 2) ? null : cursor.getString(offset + 2), // description
-            cursor.isNull(offset + 3) ? null : cursor.getString(offset + 3), // ak
+            cursor.isNull(offset + 3) ? null : cursor.getString(offset + 3), // scanCodeAk
             cursor.isNull(offset + 4) ? null : cursor.getString(offset + 4) // date
         );
         return entity;

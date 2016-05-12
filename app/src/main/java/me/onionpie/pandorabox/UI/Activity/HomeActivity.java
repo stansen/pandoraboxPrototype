@@ -1,10 +1,18 @@
 package me.onionpie.pandorabox.UI.Activity;
 
+import android.Manifest;
 import android.content.Intent;
+import android.content.pm.PackageManager;
+import android.database.Cursor;
+import android.os.Build;
 import android.os.Bundle;
+import android.os.Looper;
+import android.provider.MediaStore;
 import android.support.annotation.NonNull;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.NavigationView;
+import android.support.v4.app.ActivityCompat;
+import android.support.v4.content.ContextCompat;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
@@ -16,10 +24,16 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.LinearLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.afollestad.materialdialogs.DialogAction;
 import com.afollestad.materialdialogs.MaterialDialog;
+import com.example.jiudeng007.barcodelib.QRHelper;
+import com.example.jiudeng007.barcodelib.ScanActivity;
 import com.example.jiudeng007.barcodelib.ScanCodeActivity;
+import com.example.jiudeng007.barcodelib.SheetDialog;
+import com.example.jiudeng007.barcodelib.Utils;
+import com.google.zxing.Result;
 import com.jakewharton.rxbinding.view.RxView;
 
 import java.util.concurrent.TimeUnit;
@@ -38,11 +52,20 @@ import me.onionpie.pandorabox.UI.Fragment.PasswordListFragment.OnListFragmentInt
 import me.onionpie.pandorabox.UI.Fragment.PasswordRuleFragment;
 import me.onionpie.pandorabox.Utils.AppManager;
 import me.onionpie.pandorabox.Utils.CommonPreference;
+import me.onionpie.pandorabox.Utils.Sercurity;
+import rx.Observable;
+import rx.Subscriber;
+import rx.Subscription;
+import rx.android.schedulers.AndroidSchedulers;
 import rx.functions.Action1;
+import rx.schedulers.Schedulers;
 
 public class HomeActivity extends BaseActivity
-        implements NavigationView.OnNavigationItemSelectedListener, OnListFragmentInteractionListener {
+        implements NavigationView.OnNavigationItemSelectedListener, OnListFragmentInteractionListener, SheetDialog.onDialogItemClickListener {
     private static final int OPENPASSWORDDETAIL = 10000;
+    private static final int CameraRequest = 10002;
+    private static final int GalleryRequest = 10003;
+    public static final int RequestCode = 10001;
     @Bind(R.id.toolbar)
     Toolbar mToolbar;
     @Bind(R.id.fab)
@@ -115,19 +138,19 @@ public class HomeActivity extends BaseActivity
 
     private void setNavViewHeader() {
         View view = mNavView.getHeaderView(0);
-        LinearLayout linearLayout = (LinearLayout)view.findViewById(R.id.container);
-        final TextView textView = (TextView)view.findViewById(R.id.title) ;
+        LinearLayout linearLayout = (LinearLayout) view.findViewById(R.id.container);
+        final TextView textView = (TextView) view.findViewById(R.id.title);
         textView.setText(PandoraApplication.phone);
         linearLayout.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if (CommonPreference.getBoolean(HomeActivity.this, Constans.KEY_IS_USER_LOGIN)){
+                if (CommonPreference.getBoolean(HomeActivity.this, Constans.KEY_IS_USER_LOGIN)) {
                     //登录
-                    Log.v("is_login","true");
-                }else {
+                    Log.v("is_login", "true");
+                } else {
                     //未登录
-                    Log.v("is_login","false");
-                    Intent intent = new Intent(HomeActivity.this,LoginActivity.class);
+                    Log.v("is_login", "false");
+                    Intent intent = new Intent(HomeActivity.this, LoginActivity.class);
                     startActivity(intent);
                 }
             }
@@ -198,10 +221,21 @@ public class HomeActivity extends BaseActivity
         return true;
     }
 
+    private PasswordTextInfoModel mPasswordTextInfoModel;
+    private int mPosition;
+
     @Override
     public void onListFragmentInteraction(PasswordTextInfoModel item, int position) {
-        Intent intent = PasswordDetailActivity.getStartIntent(this, false, item, position);
-        startActivityForResult(intent, OPENPASSWORDDETAIL);
+        boolean isScanCodeUseful = CommonPreference.getBoolean(this, Constans.KEY_IS_SCAN_CODE_USEFUL);
+        mPasswordTextInfoModel = item;
+        mPosition = position;
+        if (isScanCodeUseful) {
+            Intent intent = PasswordDetailActivity.getStartIntent(this, false, item, position);
+            startActivityForResult(intent, OPENPASSWORDDETAIL);
+        } else {
+            showSheetDialog();
+        }
+
     }
 
     @Override
@@ -211,16 +245,86 @@ public class HomeActivity extends BaseActivity
             switch (requestCode) {
                 case OPENPASSWORDDETAIL:
                     break;
+                case RequestCode:
+                    String[] proj = {MediaStore.Images.Media.DATA};
+                    // 获取选中图片的路径
+                    Cursor cursor = getContentResolver().query(data.getData(),
+                            proj, null, null, null);
+
+                    if (cursor.moveToFirst()) {
+
+                        int column_index = cursor
+                                .getColumnIndexOrThrow(MediaStore.Images.Media.DATA);
+                        String photo_path = cursor.getString(column_index);
+                        if (photo_path == null) {
+                            photo_path = Utils.getPath(getApplicationContext(),
+                                    data.getData());
+                            Log.i("123path  Utils", photo_path);
+                        }
+                        Log.i("123path", photo_path);
+                        final String finalPhoto_path = photo_path;
+                        Subscription subscription = Observable.create(new Observable.OnSubscribe<Boolean>() {
+                            @Override
+                            public void call(Subscriber<? super Boolean> subscriber) {
+                                Result result = QRHelper.getScanBitmap(finalPhoto_path);
+                                // String result = decode(photo_path);
+                                if (result == null) {
+                                    subscriber.onNext(false);
+                                } else {
+                                    Log.i("123result", result.toString());
+                                    // Log.i("123result", result.getText());
+                                    // 数据返回
+                                    String recode = QRHelper.recode(result.toString());
+                                    try {
+//                                        String destiny = Sercurity.aesEncrypt(recode, PandoraApplication.scanCodeAk);
+                                        if (recode.equals(CommonPreference.getString(HomeActivity.this, Constans.KEY_SCAN_CODE_VALUE))) {
+                                            subscriber.onNext(true);
+                                        } else {
+                                            subscriber.onNext(false);
+                                        }
+                                    } catch (Exception e) {
+                                        subscriber.onNext(false);
+                                        e.printStackTrace();
+                                    }
+                                    Log.d("recode", recode);
+                                }
+                            }
+                        }).subscribeOn(Schedulers.io())
+                                .observeOn(AndroidSchedulers.mainThread())
+                                .subscribe(new Subscriber<Boolean>() {
+                                    @Override
+                                    public void onCompleted() {
+
+                                    }
+
+                                    @Override
+                                    public void onError(Throwable e) {
+                                        Toast.makeText(getApplicationContext(), "验证失败", Toast.LENGTH_SHORT)
+                                                .show();
+                                    }
+
+                                    @Override
+                                    public void onNext(Boolean aBoolean) {
+                                        if (aBoolean) {
+                                            Intent intent = PasswordDetailActivity.getStartIntent(HomeActivity.this, false, mPasswordTextInfoModel, mPosition);
+                                            startActivityForResult(intent, OPENPASSWORDDETAIL);
+                                        } else {
+                                            Toast.makeText(getApplicationContext(), "验证失败", Toast.LENGTH_SHORT)
+                                                    .show();
+                                        }
+                                    }
+                                });
+                        addSubscription(subscription);
+                    }
+                    cursor.close();
             }
         }
     }
 
-    private void validate2DCode() {
-        if (CommonPreference.getBoolean(this, Constans.QRCODE_VALID)) {
-
-        } else {
-
-        }
+    private void showSheetDialog() {
+        SheetDialog sheetDialog = new SheetDialog();
+        sheetDialog.setOnDialogItemClickListener(HomeActivity.this);
+        sheetDialog.showDialog(HomeActivity.this);
     }
 
     @Override
@@ -230,5 +334,75 @@ public class HomeActivity extends BaseActivity
             return mDoubleClickExitHelper.onKeyDown(keyCode, event);
         }
         return super.onKeyDown(keyCode, event);
+    }
+
+    @Override
+    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
+        switch (requestCode) {
+            case CameraRequest:
+                if (grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                    // Permission Granted
+                    Intent intent = new Intent(this, ScanActivity.class);
+                    startActivity(intent);
+//                    getImageFromGallery();
+                } else {
+                    // Permission Denied
+                    Toast.makeText(HomeActivity.this, "拍照请求被拒绝了", Toast.LENGTH_SHORT)
+                            .show();
+                }
+                break;
+            case GalleryRequest:
+                if (grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                    // Permission Granted
+                    getImageFromGallery();
+                } else {
+                    // Permission Denied
+                    Toast.makeText(HomeActivity.this, "相册请求被拒绝了", Toast.LENGTH_SHORT)
+                            .show();
+                }
+
+                break;
+        }
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
+    }
+
+
+    @Override
+    public void onItem1Clicked() {
+        if (Build.VERSION.SDK_INT >= 23) {
+            int checkPermission = ContextCompat.checkSelfPermission(this, Manifest.permission.CAMERA);
+            if (checkPermission != PackageManager.PERMISSION_GRANTED) {
+                ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.CAMERA}, CameraRequest);
+            } else {
+                Intent intent = new Intent(this, ScanActivity.class);
+                startActivity(intent);
+            }
+        }
+
+    }
+
+    @Override
+    public void onItem2Clicked() {
+        if (Build.VERSION.SDK_INT >= 23) {
+            int checkPermission = ContextCompat.checkSelfPermission(this, Manifest.permission.READ_EXTERNAL_STORAGE);
+            if (checkPermission != PackageManager.PERMISSION_GRANTED) {
+                ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.READ_EXTERNAL_STORAGE}, GalleryRequest);
+            } else {
+                getImageFromGallery();
+            }
+        } else getImageFromGallery();
+    }
+
+
+    private void getImageFromGallery() {
+        Intent innerIntent = new Intent();
+        if (Build.VERSION.SDK_INT < 19) {
+            innerIntent.setAction(Intent.ACTION_GET_CONTENT);
+        } else {
+            innerIntent.setAction(Intent.ACTION_PICK);
+        }
+        innerIntent.setType("image/*");
+        Intent wrapperIntent = Intent.createChooser(innerIntent, "选择二维码图片");
+        startActivityForResult(wrapperIntent, RequestCode);
     }
 }

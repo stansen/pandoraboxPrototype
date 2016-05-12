@@ -23,7 +23,7 @@
         android:id="@+id/account_name"
         style="@style/EditTextStyle"
         android:drawableLeft="@mipmap/jd_s_tel_icon"
-        android:digits="@string/limit_input_word"
+        android:inputType="phone"
         android:hint="@string/phone"
         android:textColorHint="@color/text_color5"/>
     <com.rengwuxian.materialedittext.MaterialEditText

@@ -41,7 +41,7 @@ public class FileUtil {
     }
 
     public static File getSaveFolder(String folderName) {
-        File file = new File(getSDCardPath() + File.separator + folderName + File.separator);
+        File file = new File(getSDCardPath() + File.separator + folderName);
         file.mkdirs();
         return file;
     }

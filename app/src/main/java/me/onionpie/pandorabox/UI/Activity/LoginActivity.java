@@ -1,5 +1,6 @@
 package me.onionpie.pandorabox.UI.Activity;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.widget.Button;
@@ -10,6 +11,7 @@ import com.rengwuxian.materialedittext.MaterialEditText;
 
 import butterknife.Bind;
 import butterknife.ButterKnife;
+import butterknife.OnClick;
 import me.onionpie.pandorabox.R;
 
 public class LoginActivity extends AppCompatActivity {
@@ -30,5 +32,11 @@ public class LoginActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
         ButterKnife.bind(this);
+    }
+
+    @OnClick(R.id.to_register)
+    public void ToRegister(){
+        Intent intent = new Intent(this,RegisterActivity.class);
+        startActivity(intent);
     }
 }

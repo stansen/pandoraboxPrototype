@@ -19,4 +19,6 @@ public class Constans {
 
     public static final String KEY_SCAN_CODE_VALUE = "scan_code_value";
 
+    public static final String KEY_IS_SCAN_CODE_USEFUL = "is_scan_code_useful_value";
+
 }

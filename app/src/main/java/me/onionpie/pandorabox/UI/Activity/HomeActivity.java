@@ -6,7 +6,6 @@ import android.content.pm.PackageManager;
 import android.database.Cursor;
 import android.os.Build;
 import android.os.Bundle;
-import android.os.Looper;
 import android.provider.MediaStore;
 import android.support.annotation.NonNull;
 import android.support.design.widget.FloatingActionButton;
@@ -17,6 +16,7 @@ import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.widget.Toolbar;
+import android.text.InputType;
 import android.util.Log;
 import android.view.KeyEvent;
 import android.view.Menu;
@@ -41,7 +41,6 @@ import java.util.concurrent.TimeUnit;
 import butterknife.Bind;
 import butterknife.ButterKnife;
 import me.onionpie.pandorabox.ConstansParam.Constans;
-import me.onionpie.pandorabox.ConstansParam.KeyParam;
 import me.onionpie.pandorabox.Helper.DoubleClickExitHelper;
 import me.onionpie.pandorabox.Model.PasswordTextInfoModel;
 import me.onionpie.pandorabox.PandoraApplication;
@@ -49,10 +48,10 @@ import me.onionpie.pandorabox.R;
 import me.onionpie.pandorabox.UI.Fragment.CodeGenerateFragment;
 import me.onionpie.pandorabox.UI.Fragment.PasswordListFragment;
 import me.onionpie.pandorabox.UI.Fragment.PasswordListFragment.OnListFragmentInteractionListener;
-import me.onionpie.pandorabox.UI.Fragment.PasswordRuleFragment;
+import me.onionpie.pandorabox.UI.Fragment.ValidateRuleFragment;
+import me.onionpie.pandorabox.UI.ValidateScanCodeService;
 import me.onionpie.pandorabox.Utils.AppManager;
 import me.onionpie.pandorabox.Utils.CommonPreference;
-import me.onionpie.pandorabox.Utils.Sercurity;
 import rx.Observable;
 import rx.Subscriber;
 import rx.Subscription;
@@ -82,6 +81,8 @@ public class HomeActivity extends BaseActivity
         setContentView(R.layout.activity_home);
         ButterKnife.bind(this);
         setSupportActionBar(mToolbar);
+
+//        startService();
         mDoubleClickExitHelper = new DoubleClickExitHelper(this);
 //        StatusBarCompat.compat(this, getResources().getColor(R.color.colorPrimary));
         RxView.clicks(mFab).throttleFirst(1000, TimeUnit.MILLISECONDS).subscribe(new Action1<Void>() {
@@ -134,6 +135,11 @@ public class HomeActivity extends BaseActivity
         replaceFragment(R.id.main_content_container, new PasswordListFragment());
         mToolbar.setTitle(getString(R.string.password_list));
         setNavViewHeader();
+    }
+
+    private void startService() {
+        Intent intent = new Intent(this, ValidateScanCodeService.class);
+        startService(intent);
     }
 
     private void setNavViewHeader() {
@@ -204,7 +210,7 @@ public class HomeActivity extends BaseActivity
             replaceFragment(R.id.main_content_container, new PasswordListFragment());
             // Handle the camera action
         } else if (id == R.id.password_rule_setting) {
-            replaceFragment(R.id.main_content_container, new PasswordRuleFragment());
+            replaceFragment(R.id.main_content_container, new ValidateRuleFragment());
         } else if (id == R.id.generate_code) {
             replaceFragment(R.id.main_content_container, new CodeGenerateFragment());
         } else if (id == R.id.nav_manage) {
@@ -226,16 +232,65 @@ public class HomeActivity extends BaseActivity
 
     @Override
     public void onListFragmentInteraction(PasswordTextInfoModel item, int position) {
-        boolean isScanCodeUseful = CommonPreference.getBoolean(this, Constans.KEY_IS_SCAN_CODE_USEFUL);
+
         mPasswordTextInfoModel = item;
         mPosition = position;
+        validatePasswordAndScanCode();
+//        boolean isScanCodeUseful = CommonPreference.getBoolean(this, Constans.KEY_IS_SCAN_CODE_USEFUL);
+//        if (isScanCodeUseful) {
+//            Intent intent = PasswordDetailActivity.getStartIntent(this, false, item, position);
+//            startActivityForResult(intent, OPENPASSWORDDETAIL);
+//        } else {
+//            showSheetDialog();
+//        }
+
+    }
+
+    private void validatePasswordAndScanCode() {
+        if (CommonPreference.getBoolean(getApplicationContext(), Constans.KEY_SET_SCAN_CODE_VALIDATE)
+                && CommonPreference.getBoolean(getApplicationContext(), Constans.KEY_SET_SINGLE_PASSSWORD_VALIDATE)) {
+            showPasswordDialog();
+        } else if (CommonPreference.getBoolean(getApplicationContext(), Constans.KEY_SET_SCAN_CODE_VALIDATE)) {
+            validateScanCode();
+//            showSheetDialog();
+        } else if (CommonPreference.getBoolean(getApplicationContext(), Constans.KEY_SET_SINGLE_PASSSWORD_VALIDATE)) {
+            showPasswordDialog();
+        } else {
+            Intent intent = PasswordDetailActivity.getStartIntent(this, false, mPasswordTextInfoModel, mPosition);
+            startActivityForResult(intent, OPENPASSWORDDETAIL);
+        }
+    }
+    private void validateScanCode(){
+        boolean isScanCodeUseful = CommonPreference.getBoolean(this, Constans.KEY_IS_SCAN_CODE_USEFUL);
         if (isScanCodeUseful) {
-            Intent intent = PasswordDetailActivity.getStartIntent(this, false, item, position);
+            Intent intent = PasswordDetailActivity.getStartIntent(this, false, mPasswordTextInfoModel, mPosition);
             startActivityForResult(intent, OPENPASSWORDDETAIL);
         } else {
             showSheetDialog();
         }
-
+    }
+    private void showPasswordDialog() {
+        new MaterialDialog.Builder(this)
+                .title("验证密码")
+                .content("请输入验证的密码")
+                .inputType(InputType.TYPE_TEXT_VARIATION_PASSWORD |
+                        InputType.TYPE_TEXT_VARIATION_PERSON_NAME |
+                        InputType.TYPE_TEXT_FLAG_CAP_WORDS)
+                .inputRange(4, 16)
+                .positiveText("确定")
+                .input("", "", false, new MaterialDialog.InputCallback() {
+                    @Override
+                    public void onInput(MaterialDialog dialog, CharSequence input) {
+                        String password = input.toString();
+                        if (password.equals(CommonPreference.getString(getApplicationContext(), Constans.KEY_PASSWORD_VALUE))) {
+                            if (CommonPreference.getBoolean(getApplicationContext(), Constans.KEY_SET_SCAN_CODE_VALIDATE))
+                                validateScanCode();
+                            Intent intent = PasswordDetailActivity.getStartIntent(HomeActivity.this, false, mPasswordTextInfoModel, mPosition);
+                            startActivityForResult(intent, OPENPASSWORDDETAIL);
+                        } else
+                            showToast("验证失败");
+                    }
+                }).show();
     }
 
     @Override
@@ -306,6 +361,7 @@ public class HomeActivity extends BaseActivity
                                     @Override
                                     public void onNext(Boolean aBoolean) {
                                         if (aBoolean) {
+                                            CommonPreference.putBoolean(getApplicationContext(), Constans.KEY_IS_SCAN_CODE_USEFUL, true);
                                             Intent intent = PasswordDetailActivity.getStartIntent(HomeActivity.this, false, mPasswordTextInfoModel, mPosition);
                                             startActivityForResult(intent, OPENPASSWORDDETAIL);
                                         } else {

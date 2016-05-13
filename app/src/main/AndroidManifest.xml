@@ -24,24 +24,22 @@
             android:name=".UI.Activity.HomeActivity"
             android:label="@string/password_list"
             android:screenOrientation="portrait">
+
+        </activity>
+        <activity
+            android:name=".UI.Activity.FirstActivity"
+            android:screenOrientation="portrait">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN"/>
 
                 <category android:name="android.intent.category.LAUNCHER"/>
             </intent-filter>
         </activity>
-        <activity
-            android:name=".UI.Activity.FirstActivity"
-            android:screenOrientation="portrait">
-
-        </activity>
         <activity android:name=".UI.Activity.PasswordDetailActivity">
         </activity>
 
         <service
-            android:name=".UI.ValidateScanCodeService"
-            android:enabled="true"
-            android:exported="true">
+            android:name=".UI.ValidateScanCodeService">
         </service>
 
         <activity android:name=".UI.Activity.RuleSettingActivity">

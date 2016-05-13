@@ -9,7 +9,7 @@
         <item
             android:id="@+id/password_rule_setting"
             android:icon="@drawable/ic_menu_gallery"
-            android:title="@string/password_rule_setting"/>
+            android:title="@string/validate_config"/>
         <item
             android:id="@+id/generate_code"
             android:icon="@drawable/ic_menu_slideshow"
@@ -17,7 +17,7 @@
         <item
             android:id="@+id/nav_manage"
             android:icon="@drawable/ic_menu_manage"
-            android:title="Tools"/>
+            android:title="同步"/>
     </group>
 
     <item android:title="@string/setting">

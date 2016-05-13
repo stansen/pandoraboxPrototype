@@ -21,4 +21,10 @@ public class Constans {
 
     public static final String KEY_IS_SCAN_CODE_USEFUL = "is_scan_code_useful_value";
 
+    public static final String KEY_SET_SCAN_CODE_VALIDATE = "is_scan_code_validate_opened";
+
+    public static final String KEY_SET_SINGLE_PASSSWORD_VALIDATE = "is_single_password_seted";
+
+    public static final String KEY_PASSWORD_VALUE = "native_password";
+
 }

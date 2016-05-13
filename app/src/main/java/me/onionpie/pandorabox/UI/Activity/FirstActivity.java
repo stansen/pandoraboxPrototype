@@ -11,6 +11,7 @@ import android.view.WindowManager;
 
 import me.onionpie.pandorabox.ConstansParam.Constans;
 import me.onionpie.pandorabox.R;
+import me.onionpie.pandorabox.UI.ValidateScanCodeService;
 import me.onionpie.pandorabox.Utils.CommonPreference;
 
 public class FirstActivity extends AppCompatActivity {
@@ -21,6 +22,8 @@ public class FirstActivity extends AppCompatActivity {
         getWindow().requestFeature(Window.FEATURE_ACTION_BAR);
         getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN, WindowManager.LayoutParams.FLAG_FULLSCREEN);
         setContentView(R.layout.activity_first);
+        startService();
+        Log.d("pd_service  first",Thread.currentThread().getId()+"");
         new Handler().postDelayed(new Runnable() {
             @Override
             public void run() {
@@ -37,6 +40,11 @@ public class FirstActivity extends AppCompatActivity {
                 finish();
             }
         }, 1500);
+    }
+
+    private void startService(){
+        Intent intent = new Intent(this, ValidateScanCodeService.class);
+        startService(intent);
     }
 }
 

@@ -356,7 +356,7 @@ public class WelcomeActivity extends AppCompatActivity {
 //    }
 
     public void saveFirstTimeOpenStatus() {
-//        CommonPreference.putBoolean(this, Constans.KEY_IS_APP_FIRST_TIME_OPEN, true);
+        CommonPreference.putBoolean(this, Constans.KEY_IS_APP_FIRST_TIME_OPEN, true);
         Intent in = new Intent(this, HomeActivity.class);
         startActivity(in);
         finish();

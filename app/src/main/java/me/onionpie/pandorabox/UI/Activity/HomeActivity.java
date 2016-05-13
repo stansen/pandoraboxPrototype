@@ -285,8 +285,10 @@ public class HomeActivity extends BaseActivity
                         if (password.equals(CommonPreference.getString(getApplicationContext(), Constans.KEY_PASSWORD_VALUE))) {
                             if (CommonPreference.getBoolean(getApplicationContext(), Constans.KEY_SET_SCAN_CODE_VALIDATE))
                                 validateScanCode();
-                            Intent intent = PasswordDetailActivity.getStartIntent(HomeActivity.this, false, mPasswordTextInfoModel, mPosition);
-                            startActivityForResult(intent, OPENPASSWORDDETAIL);
+                            else {
+                                Intent intent = PasswordDetailActivity.getStartIntent(HomeActivity.this, false, mPasswordTextInfoModel, mPosition);
+                                startActivityForResult(intent, OPENPASSWORDDETAIL);
+                            }
                         } else
                             showToast("验证失败");
                     }

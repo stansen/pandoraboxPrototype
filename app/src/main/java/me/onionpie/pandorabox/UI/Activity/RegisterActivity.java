@@ -1,5 +1,6 @@
 package me.onionpie.pandorabox.UI.Activity;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 import android.widget.Button;
@@ -73,6 +74,10 @@ public class RegisterActivity extends BaseActivity {
                     public void onNext(ResponseModel responseModel) {
                         Log.d("register",responseModel.toString());
                         if (!responseModel.error){
+                            Intent intent = new Intent(RegisterActivity.this,LoginActivity.class);
+                            intent.putExtra("account",mAccountName.getText().toString());
+                            intent.putExtra("password",mPassword.getText().toString());
+                            startActivity(intent);
                             showToast("success");
 //                            showToast(responseModel.result);
                         }

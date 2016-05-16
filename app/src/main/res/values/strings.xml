@@ -40,4 +40,6 @@
     <string name="phone">手机号</string>
     <string name="generate_code">二维码生成</string>
     <string name="validate_config">验证设置</string>
+    <string name="reset">重置</string>
+    <string name="synchronization">同步</string>
 </resources>

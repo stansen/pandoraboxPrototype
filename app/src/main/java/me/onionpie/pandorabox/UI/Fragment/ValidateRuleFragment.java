@@ -19,10 +19,16 @@ import com.kyleduo.switchbutton.SwitchButton;
 
 import butterknife.Bind;
 import butterknife.ButterKnife;
+import butterknife.OnClick;
 import me.onionpie.pandorabox.ConstansParam.Constans;
 import me.onionpie.pandorabox.R;
+import me.onionpie.pandorabox.Rx.Event.UpdateValidateConfigEvent;
+import me.onionpie.pandorabox.Rx.RxBus;
 import me.onionpie.pandorabox.UI.Activity.PasswordDetailActivity;
+import me.onionpie.pandorabox.UI.Activity.ResetValidateActivity;
 import me.onionpie.pandorabox.Utils.CommonPreference;
+import rx.Subscription;
+import rx.functions.Action1;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -42,7 +48,25 @@ public class ValidateRuleFragment extends BaseFragment {
     public ValidateRuleFragment() {
         // Required empty public constructor
     }
+    private Subscription mSubscription;
+    @Override
+    public void onStart() {
+        super.onStart();
+        if (mSubscription == null || !mSubscription.isUnsubscribed()){
+            mSubscription = RxBus.getInstance().toObserverable().subscribe(new Action1<Object>() {
+                @Override
+                public void call(Object o) {
+                    if (o instanceof UpdateValidateConfigEvent){
+                        try {
+                            setSwitchButtonStatus();
+                        }catch (Exception e){
 
+                        }
+                    }
+                }
+            });
+        }
+    }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -104,13 +128,17 @@ public class ValidateRuleFragment extends BaseFragment {
     private void setSwitchButtonStatus(){
         if (CommonPreference.getBoolean(getContext(),Constans.KEY_SET_SCAN_CODE_VALIDATE)){
             mScanCodeSwitch.setChecked(true);
+            mScanCodeSwitch.setEnabled(false);
         }else {
+            mScanCodeSwitch.setEnabled(true);
             mScanCodeSwitch.setChecked(false);
         }
         if (CommonPreference.getBoolean(getContext(),Constans.KEY_SET_SINGLE_PASSSWORD_VALIDATE)){
             mPasswordSwitch.setChecked(true);
+            mScanCodeSwitch.setEnabled(false);
         }else {
             mPasswordSwitch.setChecked(false);
+            mScanCodeSwitch.setEnabled(true);
         }
     }
 
@@ -135,5 +163,20 @@ public class ValidateRuleFragment extends BaseFragment {
     public void onDestroyView() {
         super.onDestroyView();
         ButterKnife.unbind(this);
+
     }
+
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+        if (mSubscription !=null)
+            mSubscription.unsubscribe();
+    }
+
+    @OnClick(R.id.reset)
+    public void onClickReset(){
+        Intent intent = new Intent(getActivity(), ResetValidateActivity.class);
+        startActivity(intent);
+    }
+
 }

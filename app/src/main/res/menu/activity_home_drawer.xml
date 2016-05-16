@@ -14,18 +14,19 @@
             android:id="@+id/generate_code"
             android:icon="@drawable/ic_menu_slideshow"
             android:title="@string/generate_code"/>
-        <item
-            android:id="@+id/nav_manage"
-            android:icon="@drawable/ic_menu_manage"
-            android:title="同步"/>
+
     </group>
 
     <item android:title="@string/setting">
         <menu>
             <item
-                android:id="@+id/nav_scan_code"
-                android:icon="@drawable/ic_menu_share"
-                android:title="@string/scan_code_setting"/>
+                android:id="@+id/nav_synchronization"
+                android:icon="@drawable/ic_menu_manage"
+                android:title="@string/synchronization"/>
+            <!--<item-->
+                <!--android:id="@+id/nav_scan_code"-->
+                <!--android:icon="@drawable/ic_menu_share"-->
+                <!--android:title="@string/scan_code_setting"/>-->
             <item
                 android:id="@+id/password_export"
                 android:icon="@drawable/ic_menu_send"

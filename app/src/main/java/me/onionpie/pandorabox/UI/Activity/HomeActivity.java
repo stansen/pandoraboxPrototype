@@ -202,7 +202,7 @@ public class HomeActivity extends BaseActivity
         // Handle navigation view item clicks here.
 
         int id = item.getItemId();
-        if (id == R.id.nav_scan_code || id == R.id.nav_send) {
+        if (id == R.id.nav_synchronization || id == R.id.nav_send) {
 
         } else
             mToolbar.setTitle(item.getTitle());
@@ -213,13 +213,20 @@ public class HomeActivity extends BaseActivity
             replaceFragment(R.id.main_content_container, new ValidateRuleFragment());
         } else if (id == R.id.generate_code) {
             replaceFragment(R.id.main_content_container, new CodeGenerateFragment());
-        } else if (id == R.id.nav_manage) {
-
-        } else if (id == R.id.nav_scan_code) {
-            Intent intent = new Intent(this, ScanCodeActivity.class);
+        } else if (id == R.id.nav_synchronization) {
+            Intent intent = new Intent(this, SynchronizationActivity.class);
             startActivity(intent);
-        } else if (id == R.id.password_export) {
+//            if (CommonPreference.getBoolean(this,Constans.KEY_IS_USER_LOGIN)){
+//                Intent intent = new Intent(this, SynchronizationActivity.class);
+//                startActivity(intent);
+//            }else {
+//                Intent intent = new Intent(this, LoginActivity.class);
+//                startActivity(intent);
+//            }
 
+        } else if (id == R.id.password_export) {
+            Intent intent = new Intent(this,ExportActivity.class);
+            startActivity(intent);
         }
 
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);

@@ -31,7 +31,7 @@ public class ValidateScanCodeService extends Service {
         Log.d("pd_service service",Thread.currentThread().getId()+"");
     }
 //    int time = 1000*60*5;
-    int time = 60000;
+    int time = 5*60000;
     @Override
     public int onStartCommand(Intent intent, int flags, int startId) {
         Log.d("pd_service commond",Thread.currentThread().getId()+"");

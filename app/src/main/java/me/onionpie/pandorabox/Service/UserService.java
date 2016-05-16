@@ -11,4 +11,7 @@ import rx.Observable;
 public interface UserService {
     @GET("user/register")
     Observable<ResponseModel> register(@Query("user_name") String name, @Query("user_pwd") String password);
+
+    @GET("user/login")
+    Observable<ResponseModel> login(@Query("user_name") String name, @Query("user_pwd") String password);
 }

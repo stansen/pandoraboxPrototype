@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest package="me.onionpie.pandorabox"
-          xmlns:android="http://schemas.android.com/apk/res/android"
-          xmlns:andorid="http://schemas.android.com/apk/res-auto">
+          xmlns:andorid="http://schemas.android.com/apk/res-auto"
+          xmlns:android="http://schemas.android.com/apk/res/android">
 
     <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE"/>
     <uses-permission android:name="android.permission.CAMERA"/>
@@ -9,10 +9,11 @@
     <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE"/>
     <uses-permission android:name="android.permission.INTERNET"/>
     <uses-permission android:name="android.permission.MOUNT_UNMOUNT_FILESYSTEMS"/>
+
     <application
         android:name=".PandoraApplication"
         android:allowBackup="true"
-        android:icon="@mipmap/ic_launcher"
+        android:icon="@mipmap/box_big"
         android:label="@string/app_name"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
@@ -24,7 +25,6 @@
             android:name=".UI.Activity.HomeActivity"
             android:label="@string/password_list"
             android:screenOrientation="portrait">
-
         </activity>
         <activity
             android:name=".UI.Activity.FirstActivity"
@@ -38,8 +38,7 @@
         <activity android:name=".UI.Activity.PasswordDetailActivity">
         </activity>
 
-        <service
-            android:name=".UI.ValidateScanCodeService">
+        <service android:name=".UI.ValidateScanCodeService">
         </service>
 
         <activity android:name=".UI.Activity.RuleSettingActivity">
@@ -50,7 +49,12 @@
         <activity android:name=".UI.Activity.LoginActivity">
         </activity>
         <activity android:name=".UI.Activity.RegisterActivity">
-
+        </activity>
+        <activity android:name=".UI.Activity.ResetValidateActivity">
+        </activity>
+        <activity android:name=".UI.Activity.SynchronizationActivity">
+        </activity>
+        <activity android:name=".UI.Activity.ExportActivity">
         </activity>
     </application>
 

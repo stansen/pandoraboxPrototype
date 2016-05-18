@@ -9,6 +9,7 @@ import me.onionpie.pandorabox.R;
 import me.onionpie.pandorabox.Rx.Event.UpdateValidateConfigEvent;
 import me.onionpie.pandorabox.Rx.RxBus;
 import me.onionpie.pandorabox.Utils.CommonPreference;
+import me.onionpie.pandorabox.Utils.StatusBarCompat;
 import me.onionpie.pandorabox.Widget.TopBarFragment;
 
 public class ResetValidateActivity extends BaseActivity {
@@ -17,6 +18,7 @@ public class ResetValidateActivity extends BaseActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_reset_validate);
+        StatusBarCompat.compat(this, getResources().getColor(R.color.light_blue));
         addFragment(R.id.top_bar, TopBarFragment.newInstance("重置设置", ""));
     }
 

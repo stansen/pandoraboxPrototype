@@ -38,6 +38,7 @@ import me.onionpie.pandorabox.Rx.Event.UpdatePasswordListEvent;
 import me.onionpie.pandorabox.Rx.RxBus;
 import me.onionpie.pandorabox.Utils.AppManager;
 import me.onionpie.pandorabox.Utils.Sercurity;
+import me.onionpie.pandorabox.Utils.StatusBarCompat;
 import me.onionpie.pandorabox.Widget.TopBarFragment;
 import me.onionpie.pandorabox.util.FileUtils;
 import me.onionpie.pandorabox.util.TimeUtils;
@@ -89,11 +90,12 @@ public class PasswordDetailActivity extends BaseActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_password_detail);
+        StatusBarCompat.compat(this, getResources().getColor(R.color.light_blue));
         ButterKnife.bind(this);
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-            getWindow().addFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS);
-            getWindow().setStatusBarColor(getResources().getColor(R.color.colorPrimary));
-        }
+//        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+//            getWindow().addFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS);
+//            getWindow().setStatusBarColor(getResources().getColor(R.color.colorPrimary));
+//        }
         replaceFragment(R.id.top_bar, TopBarFragment.newInstance("密码详情", ""));
         getData();
 //        supportPostponeEnterTransition();

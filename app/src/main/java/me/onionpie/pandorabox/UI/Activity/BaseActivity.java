@@ -2,6 +2,7 @@ package me.onionpie.pandorabox.UI.Activity;
 
 import android.content.Context;
 import android.content.pm.ActivityInfo;
+import android.os.Build;
 import android.os.IBinder;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentTransaction;
@@ -38,6 +39,11 @@ public class BaseActivity extends AppCompatActivity {
 //        setOrientation();
         mCompositeSubscription = new CompositeSubscription();
         AppManager.getAppManager().addActivity(this);
+    }
+    private void setStatusBarColor(){
+        if (Build.VERSION.SDK_INT >=21){
+
+        }
     }
 
     @Override

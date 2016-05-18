@@ -88,41 +88,7 @@ public class HomeActivity extends BaseActivity
         RxView.clicks(mFab).throttleFirst(1000, TimeUnit.MILLISECONDS).subscribe(new Action1<Void>() {
             @Override
             public void call(Void aVoid) {
-                mFab.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View view) {
-                        new MaterialDialog.Builder(HomeActivity.this)
-                                .title("请选择记录方式")
-                                .negativeText("拍照记录")
-                                .positiveText("文字记录")
-                                .neutralText("取消")
-                                .onPositive(new MaterialDialog.SingleButtonCallback() {
-                                    @Override
-                                    public void onClick(@NonNull MaterialDialog dialog, @NonNull DialogAction which) {
-                                        dialog.dismiss();
-
-                                        Intent intent = PasswordDetailActivity.getIntent(HomeActivity.this,
-                                                true);
-                                        startActivity(intent);
-                                    }
-                                })
-                                .onNegative(new MaterialDialog.SingleButtonCallback() {
-                                    @Override
-                                    public void onClick(@NonNull MaterialDialog dialog, @NonNull DialogAction which) {
-                                        dialog.dismiss();
-                                    }
-                                })
-                                .onNeutral(new MaterialDialog.SingleButtonCallback() {
-                                    @Override
-                                    public void onClick(@NonNull MaterialDialog dialog, @NonNull DialogAction which) {
-                                        dialog.dismiss();
-
-                                    }
-                                }).show();
-//                Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
-//                        .setAction("Action", null).show();
-                    }
-                });
+              showChooeseDialog();
             }
         });
         ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
@@ -136,10 +102,28 @@ public class HomeActivity extends BaseActivity
         mToolbar.setTitle(getString(R.string.password_list));
         setNavViewHeader();
     }
+    private void showChooeseDialog(){
+        new MaterialDialog.Builder(HomeActivity.this)
+                .title("请选择记录方式")
+                .positiveText("文字记录")
+                .neutralText("取消")
+                .onPositive(new MaterialDialog.SingleButtonCallback() {
+                    @Override
+                    public void onClick(@NonNull MaterialDialog dialog, @NonNull DialogAction which) {
+                        dialog.dismiss();
 
-    private void startService() {
-        Intent intent = new Intent(this, ValidateScanCodeService.class);
-        startService(intent);
+                        Intent intent = PasswordDetailActivity.getIntent(HomeActivity.this,
+                                true);
+                        startActivity(intent);
+                    }
+                })
+                .onNeutral(new MaterialDialog.SingleButtonCallback() {
+                    @Override
+                    public void onClick(@NonNull MaterialDialog dialog, @NonNull DialogAction which) {
+                        dialog.dismiss();
+
+                    }
+                }).show();
     }
 
     private void setNavViewHeader() {

@@ -15,10 +15,12 @@ import com.rxjavahttprequest.service.ServiceFactory;
 import butterknife.Bind;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
+import me.onionpie.pandorabox.ConstansParam.Constans;
 import me.onionpie.pandorabox.ConstansParam.UrlAddress;
 import me.onionpie.pandorabox.Model.ResponseModel;
 import me.onionpie.pandorabox.R;
 import me.onionpie.pandorabox.Service.UserService;
+import me.onionpie.pandorabox.Utils.CommonPreference;
 import me.onionpie.pandorabox.Utils.InputTypeCheck;
 import rx.Subscriber;
 import rx.Subscription;
@@ -91,6 +93,7 @@ public class LoginActivity extends BaseActivity {
                             Intent intent = new Intent(LoginActivity.this,HomeActivity.class);
                             startActivity(intent);
                             showToast("登录成功");
+                            CommonPreference.putBoolean(LoginActivity.this,Constans.KEY_IS_USER_LOGIN,true);
 //                            showToast(responseModel.result);
                         }
                     }

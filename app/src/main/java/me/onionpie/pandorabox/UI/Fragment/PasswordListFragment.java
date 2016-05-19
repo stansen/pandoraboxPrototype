@@ -170,7 +170,7 @@ public class PasswordListFragment extends BaseFragment {
                         }
 
                         if (passwordTextInfoModel.ruleName.endsWith(",")) {
-                            passwordTextInfoModel.ruleName = passwordTextInfoModel.ruleName.substring(0, passwordTextInfoModel.ruleName.length() - 2);
+                            passwordTextInfoModel.ruleName = passwordTextInfoModel.ruleName.substring(0, passwordTextInfoModel.ruleName.length() - 1);
                         }
 
 

@@ -19,7 +19,6 @@
         style="@style/EditTextStyle"
         android:hint="@string/phone"
         android:inputType="phone"
-        android:text="15958046622"
         app:met_floatingLabel="highlight"
         app:met_validateOnFocusLost="true"
         android:textColorHint="@color/text_color5"/>

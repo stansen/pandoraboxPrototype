@@ -49,18 +49,20 @@ public class ValidateRuleFragment extends BaseFragment {
     public ValidateRuleFragment() {
         // Required empty public constructor
     }
+
     private Subscription mSubscription;
+
     @Override
     public void onStart() {
         super.onStart();
-        if (mSubscription == null || !mSubscription.isUnsubscribed()){
+        if (mSubscription == null || !mSubscription.isUnsubscribed()) {
             mSubscription = RxBus.getInstance().toObserverable().subscribe(new Action1<Object>() {
                 @Override
                 public void call(Object o) {
-                    if (o instanceof UpdateValidateConfigEvent){
+                    if (o instanceof UpdateValidateConfigEvent) {
                         try {
                             setSwitchButtonStatus();
-                        }catch (Exception e){
+                        } catch (Exception e) {
 
                         }
                     }
@@ -82,23 +84,26 @@ public class ValidateRuleFragment extends BaseFragment {
         mScanCodeSwitch.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-                CommonPreference.putBoolean(getContext(),Constans.KEY_SET_SCAN_CODE_VALIDATE,isChecked);
+                CommonPreference.putBoolean(getContext(), Constans.KEY_SET_SCAN_CODE_VALIDATE, isChecked);
                 setSwitchButtonStatus();
             }
         });
         mPasswordSwitch.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-                if (isChecked){
-                    if (TextUtils.isEmpty(CommonPreference.getString(getContext(),Constans.KEY_PASSWORD_VALUE)))
+                if (isChecked) {
+                    if (TextUtils.isEmpty(CommonPreference.getString(getContext(), Constans.KEY_PASSWORD_VALUE)))
                         showPasswordDialog();
-                    else CommonPreference.putBoolean(getContext(),Constans.KEY_SET_SINGLE_PASSSWORD_VALIDATE,true);
-                }else CommonPreference.putBoolean(getContext(),Constans.KEY_SET_SINGLE_PASSSWORD_VALIDATE,false);
+                    else
+                        CommonPreference.putBoolean(getContext(), Constans.KEY_SET_SINGLE_PASSSWORD_VALIDATE, true);
+                } else
+                    CommonPreference.putBoolean(getContext(), Constans.KEY_SET_SINGLE_PASSSWORD_VALIDATE, false);
                 setSwitchButtonStatus();
             }
         });
         return view;
     }
+
     private void showPasswordDialog() {
         new MaterialDialog.Builder(getContext())
                 .title("验证密码")
@@ -122,23 +127,30 @@ public class ValidateRuleFragment extends BaseFragment {
 
                         String password = input.toString();
                         showToast(password);
-                        CommonPreference.putString(getContext(),Constans.KEY_PASSWORD_VALUE,password);
-                        CommonPreference.putBoolean(getContext(),Constans.KEY_SET_SINGLE_PASSSWORD_VALIDATE,true);
+                        CommonPreference.putString(getContext(), Constans.KEY_PASSWORD_VALUE, password);
+                        CommonPreference.putBoolean(getContext(), Constans.KEY_SET_SINGLE_PASSSWORD_VALIDATE, true);
                     }
                 }).show();
     }
-    private void setSwitchButtonStatus(){
-        if (CommonPreference.getBoolean(getContext(),Constans.KEY_SET_SCAN_CODE_VALIDATE)){
-            mScanCodeSwitch.setChecked(true);
+
+    private void setSwitchButtonStatus() {
+        if (TextUtils.isEmpty(CommonPreference.getString(getContext(), Constans.KEY_SCAN_CODE_VALUE))) {
             mScanCodeSwitch.setEnabled(false);
-        }else {
-            mScanCodeSwitch.setEnabled(true);
-            mScanCodeSwitch.setChecked(false);
+            showToast("您当前还未生成二维码，快去生成一个吧");
+        } else {
+            if (CommonPreference.getBoolean(getContext(), Constans.KEY_SET_SCAN_CODE_VALIDATE)) {
+                mScanCodeSwitch.setChecked(true);
+                mScanCodeSwitch.setEnabled(false);
+            } else {
+                mScanCodeSwitch.setEnabled(true);
+                mScanCodeSwitch.setChecked(false);
+            }
         }
-        if (CommonPreference.getBoolean(getContext(),Constans.KEY_SET_SINGLE_PASSSWORD_VALIDATE)){
+
+        if (CommonPreference.getBoolean(getContext(), Constans.KEY_SET_SINGLE_PASSSWORD_VALIDATE)) {
             mPasswordSwitch.setChecked(true);
             mPasswordSwitch.setEnabled(false);
-        }else {
+        } else {
             mPasswordSwitch.setChecked(false);
             mPasswordSwitch.setEnabled(true);
         }
@@ -171,16 +183,16 @@ public class ValidateRuleFragment extends BaseFragment {
     @Override
     public void onDestroy() {
         super.onDestroy();
-        if (mSubscription !=null)
+        if (mSubscription != null)
             mSubscription.unsubscribe();
     }
 
     @OnClick(R.id.reset)
-    public void onClickReset(){
-        if (CommonPreference.getBoolean(getActivity(),Constans.KEY_IS_USER_LOGIN)){
+    public void onClickReset() {
+        if (CommonPreference.getBoolean(getActivity(), Constans.KEY_IS_USER_LOGIN)) {
             Intent intent = new Intent(getActivity(), ResetValidateActivity.class);
             startActivity(intent);
-        }else {
+        } else {
             Intent intent = new Intent(getActivity(), LoginActivity.class);
             startActivity(intent);
         }

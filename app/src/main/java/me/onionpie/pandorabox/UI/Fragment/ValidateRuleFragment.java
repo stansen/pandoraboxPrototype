@@ -24,6 +24,7 @@ import me.onionpie.pandorabox.ConstansParam.Constans;
 import me.onionpie.pandorabox.R;
 import me.onionpie.pandorabox.Rx.Event.UpdateValidateConfigEvent;
 import me.onionpie.pandorabox.Rx.RxBus;
+import me.onionpie.pandorabox.UI.Activity.LoginActivity;
 import me.onionpie.pandorabox.UI.Activity.PasswordDetailActivity;
 import me.onionpie.pandorabox.UI.Activity.ResetValidateActivity;
 import me.onionpie.pandorabox.Utils.CommonPreference;
@@ -82,6 +83,7 @@ public class ValidateRuleFragment extends BaseFragment {
             @Override
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
                 CommonPreference.putBoolean(getContext(),Constans.KEY_SET_SCAN_CODE_VALIDATE,isChecked);
+                setSwitchButtonStatus();
             }
         });
         mPasswordSwitch.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
@@ -92,7 +94,7 @@ public class ValidateRuleFragment extends BaseFragment {
                         showPasswordDialog();
                     else CommonPreference.putBoolean(getContext(),Constans.KEY_SET_SINGLE_PASSSWORD_VALIDATE,true);
                 }else CommonPreference.putBoolean(getContext(),Constans.KEY_SET_SINGLE_PASSSWORD_VALIDATE,false);
-
+                setSwitchButtonStatus();
             }
         });
         return view;
@@ -135,10 +137,10 @@ public class ValidateRuleFragment extends BaseFragment {
         }
         if (CommonPreference.getBoolean(getContext(),Constans.KEY_SET_SINGLE_PASSSWORD_VALIDATE)){
             mPasswordSwitch.setChecked(true);
-            mScanCodeSwitch.setEnabled(false);
+            mPasswordSwitch.setEnabled(false);
         }else {
             mPasswordSwitch.setChecked(false);
-            mScanCodeSwitch.setEnabled(true);
+            mPasswordSwitch.setEnabled(true);
         }
     }
 
@@ -175,8 +177,13 @@ public class ValidateRuleFragment extends BaseFragment {
 
     @OnClick(R.id.reset)
     public void onClickReset(){
-        Intent intent = new Intent(getActivity(), ResetValidateActivity.class);
-        startActivity(intent);
+        if (CommonPreference.getBoolean(getActivity(),Constans.KEY_IS_USER_LOGIN)){
+            Intent intent = new Intent(getActivity(), ResetValidateActivity.class);
+            startActivity(intent);
+        }else {
+            Intent intent = new Intent(getActivity(), LoginActivity.class);
+            startActivity(intent);
+        }
     }
 
 }

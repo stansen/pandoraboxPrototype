@@ -22,7 +22,6 @@
         style="@style/EditTextStyle"
         android:hint="@string/phone"
         android:inputType="phone"
-        android:text="15958046622"
         app:met_floatingLabel="highlight"
         app:met_validateOnFocusLost="true"
         android:textColorHint="@color/text_color5"/>
@@ -56,7 +55,6 @@
         android:id="@+id/password"
         style="@style/EditTextStyle"
         app:met_floatingLabelAlwaysShown="true"
-        android:text="123456"
         android:digits="@string/limit_input_word"
         android:hint="@string/password"
         android:inputType="textPassword"
@@ -66,7 +64,6 @@
         android:layout_marginTop="20dp"
         android:id="@+id/password_confirm"
         style="@style/EditTextStyle"
-        android:text="123456"
         android:inputType="textPassword"
         app:met_floatingLabelAlwaysShown="true"
         android:digits="@string/limit_input_word"

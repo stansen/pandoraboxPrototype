@@ -68,6 +68,10 @@ public class LoginActivity extends BaseActivity {
         }else if (TextUtils.isEmpty(mPassword.getText().toString())){
             showToast("请输入密码");
         }else {
+            Intent intent = new Intent(LoginActivity.this,HomeActivity.class);
+            startActivity(intent);
+            showToast("登录成功");
+//            CommonPreference.putBoolean(LoginActivity.this,Constans.KEY_IS_USER_LOGIN,true);
             doLogin(mAccountName.getText().toString(),mPassword.getText().toString());
         }
     }

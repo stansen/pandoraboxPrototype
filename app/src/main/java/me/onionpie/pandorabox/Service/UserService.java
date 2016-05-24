@@ -9,9 +9,9 @@ import rx.Observable;
  * Created by jiudeng007 on 2016/5/11.
  */
 public interface UserService {
-    @GET("user/register")
+    @GET("jfinal_demo/user/register")
     Observable<ResponseModel> register(@Query("user_name") String name, @Query("user_pwd") String password);
 
-    @GET("user/login")
+    @GET("jfinal_demo/user/login")
     Observable<ResponseModel> login(@Query("user_name") String name, @Query("user_pwd") String password);
 }

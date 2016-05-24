@@ -26,11 +26,9 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.afollestad.materialdialogs.DialogAction;
 import com.afollestad.materialdialogs.MaterialDialog;
 import com.example.jiudeng007.barcodelib.QRHelper;
 import com.example.jiudeng007.barcodelib.ScanActivity;
-import com.example.jiudeng007.barcodelib.ScanCodeActivity;
 import com.example.jiudeng007.barcodelib.SheetDialog;
 import com.example.jiudeng007.barcodelib.Utils;
 import com.google.zxing.Result;
@@ -49,7 +47,6 @@ import me.onionpie.pandorabox.UI.Fragment.CodeGenerateFragment;
 import me.onionpie.pandorabox.UI.Fragment.PasswordListFragment;
 import me.onionpie.pandorabox.UI.Fragment.PasswordListFragment.OnListFragmentInteractionListener;
 import me.onionpie.pandorabox.UI.Fragment.ValidateRuleFragment;
-import me.onionpie.pandorabox.UI.ValidateScanCodeService;
 import me.onionpie.pandorabox.Utils.AppManager;
 import me.onionpie.pandorabox.Utils.CommonPreference;
 import rx.Observable;
@@ -88,7 +85,7 @@ public class HomeActivity extends BaseActivity
         RxView.clicks(mFab).throttleFirst(1000, TimeUnit.MILLISECONDS).subscribe(new Action1<Void>() {
             @Override
             public void call(Void aVoid) {
-              showChooeseDialog();
+                showChooeseDialog();
             }
         });
         ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
@@ -101,29 +98,39 @@ public class HomeActivity extends BaseActivity
         replaceFragment(R.id.main_content_container, new PasswordListFragment());
         mToolbar.setTitle(getString(R.string.password_list));
         setNavViewHeader();
+//        TextView textView = new TextView(this);
+//        textView.setText("注销");
+//        mDrawerLayout.addView(textView,-1,mDrawerLayout.getLayoutParams());
+//        if (CommonPreference.getBoolean(this,Constans.KEY_IS_USER_LOGIN)){
+//
+//        }
     }
-    private void showChooeseDialog(){
-        new MaterialDialog.Builder(HomeActivity.this)
-                .title("请选择记录方式")
-                .positiveText("文字记录")
-                .neutralText("取消")
-                .onPositive(new MaterialDialog.SingleButtonCallback() {
-                    @Override
-                    public void onClick(@NonNull MaterialDialog dialog, @NonNull DialogAction which) {
-                        dialog.dismiss();
 
-                        Intent intent = PasswordDetailActivity.getIntent(HomeActivity.this,
-                                true);
-                        startActivity(intent);
-                    }
-                })
-                .onNeutral(new MaterialDialog.SingleButtonCallback() {
-                    @Override
-                    public void onClick(@NonNull MaterialDialog dialog, @NonNull DialogAction which) {
-                        dialog.dismiss();
-
-                    }
-                }).show();
+    private void showChooeseDialog() {
+        Intent intent = PasswordDetailActivity.getIntent(HomeActivity.this,
+                true);
+        startActivity(intent);
+//        new MaterialDialog.Builder(HomeActivity.this)
+//                .title("请选择记录方式")
+//                .positiveText("文字记录")
+//                .neutralText("取消")
+//                .onPositive(new MaterialDialog.SingleButtonCallback() {
+//                    @Override
+//                    public void onClick(@NonNull MaterialDialog dialog, @NonNull DialogAction which) {
+//                        dialog.dismiss();
+//
+//                        Intent intent = PasswordDetailActivity.getIntent(HomeActivity.this,
+//                                true);
+//                        startActivity(intent);
+//                    }
+//                })
+//                .onNeutral(new MaterialDialog.SingleButtonCallback() {
+//                    @Override
+//                    public void onClick(@NonNull MaterialDialog dialog, @NonNull DialogAction which) {
+//                        dialog.dismiss();
+//
+//                    }
+//                }).show();
     }
 
     private void setNavViewHeader() {
@@ -161,8 +168,11 @@ public class HomeActivity extends BaseActivity
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
-        getMenuInflater().inflate(R.menu.home, menu);
-        return true;
+        if (CommonPreference.getBoolean(this, Constans.KEY_IS_USER_LOGIN)){
+            getMenuInflater().inflate(R.menu.home, menu);
+            return true;
+        }else return false;
+
     }
 
     @Override
@@ -173,7 +183,10 @@ public class HomeActivity extends BaseActivity
         int id = item.getItemId();
 
         //noinspection SimplifiableIfStatement
-        if (id == R.id.action_settings) {
+        if (id == R.id.out_of_login) {
+            CommonPreference.putBoolean(this,Constans.KEY_IS_USER_LOGIN,false);
+//            onCreateOptionsMenu(null);
+            item.setVisible(false);
             return true;
         }
 
@@ -198,18 +211,18 @@ public class HomeActivity extends BaseActivity
         } else if (id == R.id.generate_code) {
             replaceFragment(R.id.main_content_container, new CodeGenerateFragment());
         } else if (id == R.id.nav_synchronization) {
-            Intent intent = new Intent(this, SynchronizationActivity.class);
-            startActivity(intent);
-//            if (CommonPreference.getBoolean(this,Constans.KEY_IS_USER_LOGIN)){
-//                Intent intent = new Intent(this, SynchronizationActivity.class);
-//                startActivity(intent);
-//            }else {
-//                Intent intent = new Intent(this, LoginActivity.class);
-//                startActivity(intent);
-//            }
+//            Intent intent = new Intent(this, SynchronizationActivity.class);
+//            startActivity(intent);
+            if (CommonPreference.getBoolean(this,Constans.KEY_IS_USER_LOGIN)){
+                Intent intent = new Intent(this, SynchronizationActivity.class);
+                startActivity(intent);
+            }else {
+                Intent intent = new Intent(this, LoginActivity.class);
+                startActivity(intent);
+            }
 
         } else if (id == R.id.password_export) {
-            Intent intent = new Intent(this,ExportActivity.class);
+            Intent intent = new Intent(this, ExportActivity.class);
             startActivity(intent);
         }
 
@@ -251,7 +264,8 @@ public class HomeActivity extends BaseActivity
             startActivityForResult(intent, OPENPASSWORDDETAIL);
         }
     }
-    private void validateScanCode(){
+
+    private void validateScanCode() {
         boolean isScanCodeUseful = CommonPreference.getBoolean(this, Constans.KEY_IS_SCAN_CODE_USEFUL);
         if (isScanCodeUseful) {
             Intent intent = PasswordDetailActivity.getStartIntent(this, false, mPasswordTextInfoModel, mPosition);
@@ -260,6 +274,7 @@ public class HomeActivity extends BaseActivity
             showSheetDialog();
         }
     }
+
     private void showPasswordDialog() {
         new MaterialDialog.Builder(this)
                 .title("验证密码")

@@ -9,6 +9,7 @@ import android.util.Log;
 import android.view.Window;
 import android.view.WindowManager;
 
+import me.onionpie.jellybutton.JellyExampleActivity;
 import me.onionpie.pandorabox.ConstansParam.Constans;
 import me.onionpie.pandorabox.R;
 import me.onionpie.pandorabox.UI.ValidateScanCodeService;
@@ -24,6 +25,7 @@ public class FirstActivity extends AppCompatActivity {
         setContentView(R.layout.activity_first);
         startService();
         Log.d("pd_service  first",Thread.currentThread().getId()+"");
+
         new Handler().postDelayed(new Runnable() {
             @Override
             public void run() {
@@ -37,9 +39,8 @@ public class FirstActivity extends AppCompatActivity {
                     Intent intent = new Intent(FirstActivity.this, WelcomeActivity.class);
                     startActivity(intent);
                 }
-                finish();
             }
-        }, 1500);
+        }, 500);
     }
 
     private void startService(){

@@ -57,4 +57,5 @@ dependencies {
     compile 'com.nightonke:wowoviewpager:1.0.2'
     compile 'com.kyleduo.switchbutton:library:1.4.0'
     compile 'com.github.dmytrodanylyk.circular-progress-button:library:1.1.3'
+    compile project(':jellybutton')
 }
